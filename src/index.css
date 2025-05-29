@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+
+/* --------------------------Poppins Font ---------------------- */
+
+@font-face {
+  font-family: "popreg";
+  src: url("/Fonts/Poppins-Regular.ttf") format("truetype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "popmed";
+  src: url("/Fonts/Poppins-Medium.ttf") format("truetype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "popsmb";
+  src: url("/Fonts/Poppins-SemiBold.ttf") format("truetype");
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "popbold";
+  src: url("/Fonts/Poppins-Bold.ttf") format("truetype");
+  font-style: normal;
+  font-display: swap;
+}
+
+.poppins_reg {
+  font-family: "popreg", sans-serif;
+}
+
+.poppins_med {
+  font-family: "popmed", sans-serif;
+}
+
+.poppins_smb {
+  font-family: "popsmb", sans-serif;
+}
+
+.poppins_bold {
+  font-family: "popbold", sans-serif;
+}
+
+
+/* --------------------------Inter Font ---------------------- */
+
+@font-face {
+  font-family: "Inter";
+  src: url("/Fonts/Inter.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inter-Lig";
+  src: url("/Fonts/Inter-Light.otf") format("opentype");
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter-Reg";
+  src: url("/Fonts/Inter-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter-Med";
+  src: url("/Fonts/Inter-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter-Sem";
+  src: url("/Fonts/Inter-Semibold.otf") format("opentype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter-Bold";
+  src: url("/Fonts/Inter-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter-ExBold";
+  src: url("/Fonts/Inter-ExtraBold.otf") format("opentype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+.inter {
+  font-family: "Inter", sans-serif;
+}
+
+/* Individual font-weight classes */
+.inter_lig {
+  font-family: "Inter-Lig", sans-serif;
+}
+
+.inter_reg {
+  font-family: "Inter-Reg", sans-serif;
+}
+
+.inter_med {
+  font-family: "Inter-Med", sans-serif;
+}
+
+.inter_sem {
+  font-family: "Inter-Sem", sans-serif;
+}
+
+.inter_bold {
+  font-family: "Inter-Bold", sans-serif;
+}
+
+.inter_exbold {
+  font-family: "Inter-ExBold", sans-serif;
+}
