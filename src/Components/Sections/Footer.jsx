@@ -43,7 +43,7 @@ function Footer() {
       </div>
 
       {/* Divider */}
-      {/* <hr className="my-8 border-t border-gray-300" /> */}
+      <hr className="my-8 border-t border-gray-300" />
 
       {/* Legal Links */}
       <div className="flex flex-wrap justify-start md:justify-start gap-6 text-gray-600 text-xs md:text-sm">
