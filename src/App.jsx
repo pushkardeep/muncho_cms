@@ -108,7 +108,7 @@ function App() {
             </div>
 
             {/* Content Editing side  */}
-            <div className="flex-1 h-full min-h-fit flex justify-center items-center px-10">
+            <div className="flex-1 h-full overflow-hidden relative px-10">
               <Nav />
             </div>
           </div>
