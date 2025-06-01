@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Globe,
   CirclePlus,
@@ -10,8 +10,26 @@ import {
 // Components
 import SectionTab from "./Components/SectionTab";
 import Nav from "./Components/Sections/Nav";
+import Hero from "./Components/Sections/Hero";
+import Footer from "./Components/Sections/Footer";
 
 function App() {
+  const [activeSection, setActiveSection] = useState("Footer");
+
+  // Helper to render the correct section
+  const renderSection = () => {
+    switch (activeSection) {
+      case "Navigation Bar":
+        return <Nav />;
+      case "Hero Section":
+        return <Hero />;
+      case "Footer":
+        return <Footer />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <div className="w-screen h-fit overflow-hidden relative">
       <div className="w-screen h-screen flex items-center overflow-hidden relative">
@@ -92,24 +110,27 @@ function App() {
                 <SectionTab
                   Icon={LockKeyhole}
                   title={"Navigation Bar"}
-                  isActive={false}
+                  isActive={activeSection === "Navigation Bar"}
+                  onClick={() => setActiveSection("Navigation Bar")}
                 />
                 <SectionTab
                   Icon={LockKeyhole}
                   title={"Hero Section"}
-                  isActive={false}
+                  isActive={activeSection === "Hero Section"}
+                  onClick={() => setActiveSection("Hero Section")}
                 />
                 <SectionTab
                   Icon={LockKeyhole}
                   title={"Footer"}
-                  isActive={true}
+                  isActive={activeSection === "Footer"}
+                  onClick={() => setActiveSection("Footer")}
                 />
               </div>
             </div>
 
             {/* Content Editing side  */}
             <div className="flex-1 h-full overflow-hidden relative px-10">
-              <Nav />
+              {renderSection()}
             </div>
           </div>
         </div>
