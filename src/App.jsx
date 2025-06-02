@@ -10,6 +10,7 @@ import {
 // Components
 import SectionTab from "./Components/SectionTab";
 import Nav from "./Components/Sections/Nav";
+import Hero from "./Components/Sections/Hero";
 
 function App() {
   return (
@@ -71,9 +72,9 @@ function App() {
             </div>
           </div>
 
-          <div className="w-full flex-1 min-h-fit flex justify-center items-center">
+          <div className="w-full flex-1 min-h-fit flex justify-center items-start">
             {/*  Section Tabs Bar  */}
-            <div className="w-[300px] h-full min-h-fit border-r border-r-[#E8E6ED] px-5">
+            <div className="w-[300px] h-[90vh] border-r border-r-[#E8E6ED] px-5 overflow-y-auto">
               {/* Heading  */}
               <h1 className="poppins_med text-[#201F33] text-[24px]">
                 Website
@@ -108,8 +109,8 @@ function App() {
             </div>
 
             {/* Content Editing side  */}
-            <div className="flex-1 h-full overflow-hidden relative px-10">
-              <Nav />
+            <div className="flex-1 h-[90vh] relative overflow-y-auto px-10">
+              <Hero />
             </div>
           </div>
         </div>
