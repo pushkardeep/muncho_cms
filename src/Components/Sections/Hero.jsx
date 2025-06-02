@@ -14,9 +14,6 @@ const heroData = {
 function Hero() {
   return (
     <div className="w-full h-screen min-h-fit flex flex-col justify-center items-center overflow-hidden relative">
-      <div className="w-full h-fit px-8 lg:px-14 py-4 md:py-6">
-        <Nav route={"Home"} />
-      </div>
 
       <div className="w-full flex-1 min-h-fit overflow-hidden relative pb-5">
         <div className="w-full h-full rounded-2xl overflow-hidden relative">

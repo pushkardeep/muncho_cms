@@ -7,9 +7,6 @@ function SectionTab({ Icon, title, isActive, styles = "", onClick }) {
         isActive ? "bg-[#EEEBFA]" : "bg-[#F8F7FA]"
       } ${styles}`}
       onClick={onClick}
-      tabIndex={0}
-      role="button"
-      onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') onClick && onClick(); }}
     >
       <Icon color={`${isActive ? "#4B21E2" : "#5C5C7A"}`} size={24} />
       <span
