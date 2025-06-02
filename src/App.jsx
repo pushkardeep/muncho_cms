@@ -12,6 +12,8 @@ import SectionTab from "./Components/SectionTab";
 import Nav from "./Components/Sections/Nav";
 import Hero from "./Components/Sections/Hero";
 import Footer from "./Components/Sections/Footer";
+import Locations from "./Components/Sections/Locations";
+import FAQ from "./Components/Sections/FAQ";
 
 function App() {
   const [activeSection, setActiveSection] = useState("Footer");
@@ -25,6 +27,10 @@ function App() {
         return <Hero />;
       case "Footer":
         return <Footer />;
+      case "Locations":
+        return <Locations />;
+      case "FAQ Section":
+        return <FAQ />;
       default:
         return null;
     }
@@ -124,6 +130,18 @@ function App() {
                   title={"Footer"}
                   isActive={activeSection === "Footer"}
                   onClick={() => setActiveSection("Footer")}
+                />
+                <SectionTab
+                  Icon={LockKeyhole}
+                  title={"Locations"}
+                  isActive={activeSection === "Locations"}
+                  onClick={() => setActiveSection("Locations")}
+                />
+                <SectionTab
+                  Icon={LockKeyhole}
+                  title={"FAQ Section"}
+                  isActive={activeSection === "FAQ Section"}
+                  onClick={() => setActiveSection("FAQ Section")}
                 />
               </div>
             </div>

@@ -107,7 +107,19 @@ function Footer({ config, onConfigChange }) {
   };
 
   return (
-    <footer className="bg-[#EBEBEC] font-inter text-sm font-medium leading-[22px] tracking-[-0.2px] px-4 md:px-20 py-10 md:py-16 text-black relative">
+
+    <>
+
+       <div className="w-full h-fit">
+        <h1 className="poppins_med text-[#201F33] text-[18px]">
+     Footer
+        </h1>
+        <p className="w-full max-w-[78%] poppins_reg text-[#5C5C7A] text-[14px] mt-3">
+         The Footer comes at the very last of the website, this section have links to every section on the website you can enable and disable the links.
+        </p>
+      </div>
+
+     <footer className="bg-[#EBEBEC] font-inter text-sm font-medium leading-[22px] tracking-[-0.2px] px-4 md:px-20 py-10 md:py-16 text-black relative">
       {/* Edit Button */}
       <button
         className="absolute top-2 right-2 text-xs text-blue-500 underline z-10"
@@ -301,6 +313,8 @@ function Footer({ config, onConfigChange }) {
         </div>
       )}
     </footer>
+    </>
+   
   );
 }
 
