@@ -11,6 +11,7 @@ import {
 import SectionTab from "./Components/SectionTab";
 import Nav from "./Components/Sections/Nav";
 import Hero from "./Components/Sections/Hero";
+import Gallery from "./Components/Sections/Gallery";
 
 function App() {
   return (

@@ -1,16 +1,14 @@
 import React from "react";
 
-// Icons
-import { Upload } from "lucide-react";
-
 // components
 import BigBtn from "./Components/Common/BigBtn";
-import TabHeading from "../TabHeading";
+import TabHeading from "../Common/TabHeading";
 import SmButton from "../SmButton";
+import ImgUploader from "../Common/ImgUploader";
 
 function Hero() {
   return (
-    <div className="w-full h-full min-h-fit flex flex-col justify-start items-center gap-10 overflow-hidden relative pb-10">
+    <div className="w-full h-full min-h-fit flex flex-col justify-start items-center gap-10 overflow-hidden relative pb-20">
       {/* Headings  */}
       <TabHeading
         title={"Hero Section"}
@@ -58,29 +56,21 @@ function Hero() {
         {/* Inputs  */}
         <div className="w-full h-fit flex justify-between items-center gap-3">
           {/* Text Inputs */}
-          <div className="w-fit h-fit flex flex-col justify-center items-start gap-3">
+          <div className="w-full h-fit flex flex-col justify-center items-start gap-3">
             <input
-              className="poppins_reg text-[14px] text-[#5C5C7A] placeholder:text-[#5C5C7A] focus:outline-none px-2 py-3"
+              className="poppins_reg w-full text-[14px] text-[#5C5C7A] placeholder:text-[#5C5C7A] focus:outline-none px-2 py-3"
               type="text"
               placeholder="Write Tagline here"
             />
             <input
-              className="poppins_reg text-[14px] text-[#5C5C7A] placeholder:text-[#5C5C7A] focus:outline-none px-2 py-3"
+              className="poppins_reg w-full text-[14px] text-[#5C5C7A] placeholder:text-[#5C5C7A] focus:outline-none px-2 py-3"
               type="text"
               placeholder="Write Heading here"
             />
           </div>
 
           {/* Image Uploader */}
-          <button className="w-[300px] h-fit flex flex-col justify-center items-center gap-1 cursor-pointer bg-transparent hover:bg-[#201F33]/8 rounded-[8px] transition-colors duration-300 px-5 py-3">
-            <Upload color="#B9B9C7" size={20} />
-            <span className="poppins_med text-[#B9B9C7] text-[14px]">
-              Upload
-            </span>
-            <span className="poppins_reg text-[#B9B9C7] text-[14px]">
-              Background Image
-            </span>
-          </button>
+          <ImgUploader title={"Background Image"} styles="bg-transparent" />
         </div>
       </div>
     </div>

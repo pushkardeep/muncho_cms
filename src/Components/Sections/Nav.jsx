@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
 // Icons
 import { ChevronDown, Plus } from "lucide-react";
@@ -8,7 +7,7 @@ import { ChevronDown, Plus } from "lucide-react";
 import BigBtn from "./Components/Common/BigBtn";
 import Menu from "./Components/Menu";
 import LinkEditor from "../LinkEditor";
-import TabHeading from "../TabHeading";
+import TabHeading from "../Common/TabHeading";
 import SmButton from "../SmButton";
 
 function Nav({ route = "Home" }) {

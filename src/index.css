@@ -1,52 +1,54 @@
 @import "tailwindcss";
 
-
 /* --------------------------Poppins Font ---------------------- */
 
 @font-face {
-  font-family: "popreg";
+  font-family: "Poppins-Reg";
   src: url("/Fonts/Poppins-Regular.ttf") format("truetype");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "popmed";
+  font-family: "Poppins-Med";
   src: url("/Fonts/Poppins-Medium.ttf") format("truetype");
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "popsmb";
+  font-family: "Poppins-Sem";
   src: url("/Fonts/Poppins-SemiBold.ttf") format("truetype");
+  font-weight: 600;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "popbold";
+  font-family: "Poppins-Bold";
   src: url("/Fonts/Poppins-Bold.ttf") format("truetype");
+  font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 .poppins_reg {
-  font-family: "popreg", sans-serif;
+  font-family: "Poppins-Reg", sans-serif;
 }
 
 .poppins_med {
-  font-family: "popmed", sans-serif;
+  font-family: "Poppins-Med", sans-serif;
 }
 
 .poppins_smb {
-  font-family: "popsmb", sans-serif;
+  font-family: "Poppins-Sem", sans-serif;
 }
 
 .poppins_bold {
-  font-family: "popbold", sans-serif;
+  font-family: "Poppins-Bold", sans-serif;
 }
-
 
 /* --------------------------Inter Font ---------------------- */
 
