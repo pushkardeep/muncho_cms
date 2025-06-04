@@ -13,9 +13,16 @@ import Nav from "./Components/Sections/Nav";
 import Hero from "./Components/Sections/Hero";
 import Gallery from "./Components/Sections/Gallery";
 import SectionMenu from "./Components/SectionMenu";
+import { useSelector } from "react-redux";
 
 function App() {
   const [isSectionMenuOpen, setIsSectionMenuOpen] = useState(false);
+  const [currentSection, setCurrentSection] = useState({
+    name: "Hero Section",
+    section: Hero,
+  });
+
+  const { sectionTabs } = useSelector((state) => state.sections);
 
   const toggleSectionMenu = () => {
     setIsSectionMenuOpen((prev) => !prev);
@@ -101,30 +108,27 @@ function App() {
 
               {/* Secton Tabs  */}
               <div className="w-full h-fit flex flex-col justify-center items-center gap-3 mt-3">
-                <SectionTab
-                  Icon={LockKeyhole}
-                  title={"Navigation Bar"}
-                  isActive={false}
-                />
-                <SectionTab
-                  Icon={LockKeyhole}
-                  title={"Hero Section"}
-                  isActive={false}
-                />
-                <SectionTab
-                  Icon={LockKeyhole}
-                  title={"Footer"}
-                  isActive={true}
-                />
+                {sectionTabs &&
+                  sectionTabs.length > 0 &&
+                  sectionTabs.map(({ name, section, isLocked }, index) => (
+                    <SectionTab
+                      key={index}
+                      Icon={LockKeyhole}
+                      title={name}
+                      isActive={currentSection.name === name}
+                    />
+                  ))}
               </div>
 
               {/* Section Menu  */}
-              {isSectionMenuOpen && <SectionMenu />}
+              {isSectionMenuOpen && (
+                <SectionMenu setIsSectionMenuOpen={setIsSectionMenuOpen} />
+              )}
             </div>
 
             {/* Content Editing side  */}
             <div className="flex-1 h-[90vh] relative overflow-y-auto px-10">
-              <Hero />
+              <currentSection.section />
             </div>
           </div>
         </div>

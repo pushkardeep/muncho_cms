@@ -1,12 +1,35 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {};
+// Permanent Sections
+import Nav from "../../Components/Sections/Nav";
+import Hero from "../../Components/Sections/Hero";
 
-export const sectionsSlice = createSlice({
+const sectionTabs = [
+  {
+    name: "Navigation Bar",
+    isLocked: true,
+    section: Nav,
+  },
+  {
+    name: "Hero Section",
+    isLocked: true,
+    section: Hero,
+  },
+];
+
+const initialState = {
+  sectionTabs,
+};
+
+const sectionsSlice = createSlice({
   name: "sections",
   initialState,
-  reducers: {},
+  reducers: {
+    addSection: (state, action) => {
+      state.sectionTabs.splice(state.sectionTabs.length, 0, action.payload);
+    },
+  },
 });
 
-export const {} = sectionsSlice.actions; // Export actions
+export const { addSection } = sectionsSlice.actions; // Export actions
 export default sectionsSlice.reducer; // Export reducer
