@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Globe,
   CirclePlus,
@@ -15,6 +15,12 @@ import Gallery from "./Components/Sections/Gallery";
 import SectionMenu from "./Components/SectionMenu";
 
 function App() {
+  const [isSectionMenuOpen, setIsSectionMenuOpen] = useState(false);
+
+  const toggleSectionMenu = () => {
+    setIsSectionMenuOpen((prev) => !prev);
+  };
+
   return (
     <div className="w-screen h-fit overflow-hidden relative">
       <div className="w-screen h-screen flex items-center overflow-hidden relative">
@@ -76,20 +82,22 @@ function App() {
 
           <div className="w-full flex-1 min-h-fit flex justify-center items-start">
             {/*  Section Tabs Bar  */}
-            <div className="w-[300px] h-[90vh] border-r border-r-[#E8E6ED] px-5 overflow-y-auto">
+            <div className="w-[300px] h-[90vh] border-r border-r-[#E8E6ED] px-5 overflow-y-auto relative">
               {/* Heading  */}
               <h1 className="poppins_med text-[#201F33] text-[24px]">
                 Website
               </h1>
 
               {/* Add Section Bar  */}
-              <div className="w-full h-fit bg-black rounded-[8px] flex justify-between items-center p-3 cursor-pointer mt-5 relative">
+              <button
+                onClick={toggleSectionMenu}
+                className="w-full h-fit bg-black rounded-[8px] flex justify-between items-center p-3 cursor-pointer mt-5"
+              >
                 <span className="poppins_reg text-white text-[14px]">
                   Add Section
                 </span>
                 <CirclePlus color="white" size={24} />
-                <SectionMenu />
-              </div>
+              </button>
 
               {/* Secton Tabs  */}
               <div className="w-full h-fit flex flex-col justify-center items-center gap-3 mt-3">
@@ -109,6 +117,9 @@ function App() {
                   isActive={true}
                 />
               </div>
+
+              {/* Section Menu  */}
+              {isSectionMenuOpen && <SectionMenu />}
             </div>
 
             {/* Content Editing side  */}

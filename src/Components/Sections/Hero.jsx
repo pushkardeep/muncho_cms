@@ -1,12 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 
 // components
 import BigBtn from "./Components/Common/BigBtn";
 import TabHeading from "../Common/TabHeading";
 import SmButton from "../Common/SmButton";
 import ImgUploader from "../Common/ImgUploader";
+import TextInput from "../Common/TextInput";
 
 function Hero() {
+  const [heroSectionData, setHeroSectionData] = useState({
+    type: "Hero",
+    data: {
+      text: {
+        title: "",
+        heroText: "",
+      },
+      bg_image: {
+        src: "",
+        alt: "", // optional
+      },
+    },
+  });
+
+  const handleTextInputChange = (e) => {
+    const { type, name, value } = e.target;
+    setHeroSectionData((prev) => {
+      if (type === "text") {
+        return {
+          ...prev,
+          data: { ...prev.data, text: { ...prev.data.text, [name]: value } },
+        };
+      }
+    });
+  };
+
   return (
     <div className="w-full h-full min-h-fit flex flex-col justify-start items-center gap-10 overflow-hidden relative pb-20">
       {/* Headings  */}
@@ -34,11 +61,11 @@ function Hero() {
               <div className="w-fit flex justify-center items-center gap-2">
                 <div className="h-[30px] border-[3.5px] border-white"></div>
                 <h4 className="inter_reg text-white text-[16px]">
-                  Sub Title Text
+                  {heroSectionData.data.text.title || "Sub Title Text"}
                 </h4>
               </div>
-              <h1 className="inter_med w-full max-w-[650px] text-white text-[36px] mt-1.5">
-                Title Text
+              <h1 className="inter_med w-full max-w-[350px] text-white text-[36px] leading-9 tracking-[-1.1px] mt-3">
+                {heroSectionData.data.text.heroText || "Title Text"}
               </h1>
             </div>
             <BigBtn title={"Order Online"} />
@@ -57,15 +84,17 @@ function Hero() {
         <div className="w-full h-fit flex justify-between items-center gap-3">
           {/* Text Inputs */}
           <div className="w-full h-fit flex flex-col justify-center items-start gap-3">
-            <input
-              className="poppins_reg w-full text-[14px] text-[#5C5C7A] placeholder:text-[#5C5C7A] focus:outline-none px-2 py-3"
-              type="text"
-              placeholder="Write Tagline here"
+            <TextInput
+              name={"title"}
+              placeholder={"Write Title here"}
+              onChange={handleTextInputChange}
+              value={heroSectionData.data.text.title}
             />
-            <input
-              className="poppins_reg w-full text-[14px] text-[#5C5C7A] placeholder:text-[#5C5C7A] focus:outline-none px-2 py-3"
-              type="text"
-              placeholder="Write Heading here"
+            <TextInput
+              name={"heroText"}
+              placeholder={"Write Hero_Text here"}
+              onChange={handleTextInputChange}
+              value={heroSectionData.data.text.heroText}
             />
           </div>
 
