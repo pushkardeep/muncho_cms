@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 
 // Icons
 import { ChevronDown, Plus } from "lucide-react";
@@ -7,7 +6,9 @@ import { ChevronDown, Plus } from "lucide-react";
 // components
 import BigBtn from "./Components/Common/BigBtn";
 import Menu from "./Components/Menu";
-import LinkEditor from "./Components/LinkEditor";
+import LinkEditor from "../LinkEditor";
+import TabHeading from "../Common/TabHeading";
+import SmButton from "../Common/SmButton";
 
 function Nav({ route = "Home" }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -15,16 +16,12 @@ function Nav({ route = "Home" }) {
   return (
     <div className="w-full h-full min-h-fit flex flex-col justify-start items-center gap-10">
       {/* Headings  */}
-      <div className="w-full h-fit">
-        <h1 className="poppins_med text-[#201F33] text-[18px]">
-          Navigation Bar
-        </h1>
-        <p className="w-full max-w-[78%] poppins_reg text-[#5C5C7A] text-[14px] mt-3">
-          The Naviagtion Bar comes on the top of the website. Your customers can
-          navigate to different sections and go to the ordering platform
-          directly.
-        </p>
-      </div>
+      <TabHeading
+        title={"Navigation Bar"}
+        description={
+          "The Naviagtion Bar comes on the top of the website. Your customers cannavigate to different sections and go to the ordering platformdirectly."
+        }
+      />
 
       {/* Navr Bar  */}
       <nav className="w-full h-fit flex justify-between items-center relative">
@@ -111,6 +108,7 @@ function Nav({ route = "Home" }) {
               <span className="poppins_reg text-black text-[14px]">Add</span>
             </button>
           </div>
+          <SmButton title={"Save"} styles={"mt-2.5"} />
         </div>
       </div>
     </div>
