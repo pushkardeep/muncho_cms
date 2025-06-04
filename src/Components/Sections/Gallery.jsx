@@ -3,7 +3,7 @@ import React from "react";
 // Components
 import TabHeading from "../Common/TabHeading";
 import ImgUploader from "../Common/ImgUploader";
-import SmButton from "../SmButton";
+import SmButton from "../Common/SmButton";
 
 function Gallery() {
   return (

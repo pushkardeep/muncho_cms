@@ -8,7 +8,7 @@ import BigBtn from "./Components/Common/BigBtn";
 import Menu from "./Components/Menu";
 import LinkEditor from "../LinkEditor";
 import TabHeading from "../Common/TabHeading";
-import SmButton from "../SmButton";
+import SmButton from "../Common/SmButton";
 
 function Nav({ route = "Home" }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

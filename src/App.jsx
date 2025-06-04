@@ -12,6 +12,7 @@ import SectionTab from "./Components/SectionTab";
 import Nav from "./Components/Sections/Nav";
 import Hero from "./Components/Sections/Hero";
 import Gallery from "./Components/Sections/Gallery";
+import SectionMenu from "./Components/SectionMenu";
 
 function App() {
   return (
@@ -82,11 +83,12 @@ function App() {
               </h1>
 
               {/* Add Section Bar  */}
-              <div className="w-full h-fit bg-black rounded-[8px] flex justify-between items-center p-3 cursor-pointer mt-5">
+              <div className="w-full h-fit bg-black rounded-[8px] flex justify-between items-center p-3 cursor-pointer mt-5 relative">
                 <span className="poppins_reg text-white text-[14px]">
                   Add Section
                 </span>
                 <CirclePlus color="white" size={24} />
+                <SectionMenu/>
               </div>
 
               {/* Secton Tabs  */}

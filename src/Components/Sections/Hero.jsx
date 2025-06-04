@@ -3,7 +3,7 @@ import React from "react";
 // components
 import BigBtn from "./Components/Common/BigBtn";
 import TabHeading from "../Common/TabHeading";
-import SmButton from "../SmButton";
+import SmButton from "../Common/SmButton";
 import ImgUploader from "../Common/ImgUploader";
 
 function Hero() {
