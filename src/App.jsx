@@ -88,7 +88,7 @@ function App() {
                   Add Section
                 </span>
                 <CirclePlus color="white" size={24} />
-                <SectionMenu/>
+                <SectionMenu />
               </div>
 
               {/* Secton Tabs  */}
