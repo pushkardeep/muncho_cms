@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import React, { useState } from "react";
 import {
   Globe,
   CirclePlus,
@@ -11,6 +12,9 @@ import {
 import SectionTab from "./Components/SectionTab";
 import Nav from "./Components/Sections/Nav";
 import Hero from "./Components/Sections/Hero";
+import Footer from "./Components/Sections/Footer";
+import Locations from "./Components/Sections/Locations";
+import FAQ from "./Components/Sections/FAQ";
 import Gallery from "./Components/Sections/Gallery";
 import SectionMenu from "./Components/SectionMenu";
 import { useSelector } from "react-redux";
