@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import TabHeading from "../Common/TabHeading";
 
-export default function Locations() {
+// Icons
+import { Plus, ChevronRight, ChevronLeft } from "lucide-react";
+
+// Components
+import TextInput from "../Common/TextInput";
+import SmButton from "../Common/SmButton";
+import ToggleButton from "../Common/ToggleButton";
+
+function Locations() {
   const locations = [
     {
       name: "Talkin' Tacos",
@@ -9,7 +17,7 @@ export default function Locations() {
       address: "97 SW 8th St, Miami, FL 33130",
       phone: "(305) 602-4816",
       email: "info@talkintacos.net",
-      mapQuery: "97 SW 8th St, Miami, FL 33130"
+      mapQuery: "97 SW 8th St, Miami, FL 33130",
     },
     {
       name: "Another Location",
@@ -17,162 +25,225 @@ export default function Locations() {
       address: "456 Ocean Dr, Florida",
       phone: "(123) 456-7890",
       email: "contact@anotherlocation.com",
-      mapQuery: "456 Ocean Dr, Florida"
-    }
+      mapQuery: "456 Ocean Dr, Florida",
+    },
   ];
 
   const [selected, setSelected] = useState(0);
   const loc = locations[selected];
 
   return (
-    <>
-      <div className="w-full h-fit">
-        <TabHeading
-          title={"Locations"}
-          description={
-            "The Location section comes before the footer usually. You can list location of your outlets here."
-          }
-        />
-      </div>
+    <div className="w-full h-full min-h-fit flex flex-col justify-between items-center gap-10 overflow-hidden relative">
+      {/* Headings  */}
+      <TabHeading
+        title={"Locations"}
+        description={
+          "The Location section comes before the footer usually. You can list location of your outlets here."
+        }
+      />
 
-      <section className="w-full px-4 py-8 font-inter">
-        <h1 className="text-[28px] md:text-[32px] font-semibold mb-6">Our locations</h1>
+      {/* Location  */}
+      <div className="w-full h-fit flex flex-col justify-start items-center gap-4">
+        <div className="w-full h-fit flex justify-between items-center gap-4">
+          <h1 className="w-full inter_med text-black text-[32px] tracking-[-2px]">
+            Our locations
+          </h1>
 
-        {/* Location Tabs */}
-        <div className="flex gap-2 mb-6">
-          {locations.map((location, i) => (
-            <button
-              key={i}
-              onClick={() => setSelected(i)}
-              className={`px-5 py-2 rounded-full text-sm font-medium ${
-                selected === i
-                  ? "bg-black text-white"
-                  : "bg-[#EBEBEC] text-black"
-              }`}
-            >
-              {location.city}
+          <div className="w-fit h-fit flex justify-center items-center gap-2">
+            <button className="w-fix h-fit aspect-square bg-[#EBEBEC] rounded-full shadow-2xl p-2 cursor-pointer">
+              <ChevronLeft size={24} color="#323232" />
             </button>
-          ))}
-        </div>
 
-        {/* Location Card */}
-        <div className="bg-[#F5F5F5] rounded-2xl p-6 flex flex-col md:flex-row gap-6">
-          {/* Map */}
-          <iframe
-            title="Map"
-            src={`https://www.google.com/maps?q=${encodeURIComponent(loc.mapQuery)}&output=embed`}
-            className="w-full md:w-1/2 h-[240px] md:h-[300px] rounded-xl border-0"
-          ></iframe>
-
-          {/* Details */}
-          <div className="flex flex-col justify-between w-full">
-            <div>
-              <h2 className="text-xl font-semibold">{loc.name}</h2>
-              <p className="text-sm text-gray-600 mb-4">{loc.city}</p>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-800 border-t pt-4">
-                <div>
-                  <p className="font-semibold mb-1">Address</p>
-                  <p>{loc.address}</p>
-                </div>
-                <div>
-                  <p className="font-semibold mb-1">Contacts</p>
-                  <p>{loc.phone}</p>
-                  <p>{loc.email}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <a
-                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.mapQuery)}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block text-sm font-medium text-white bg-black px-4 py-2 rounded-lg"
-              >
-                Get Directions
-              </a>
-            </div>
+            <button className="w-fix h-fit aspect-square bg-[#EBEBEC] rounded-full shadow-2xl p-2 cursor-pointer">
+              <ChevronRight size={24} color="#323232" />
+            </button>
           </div>
         </div>
 
-        {/* Edit Section */}
-<div className="mt-10">
-  <h2 className="text-lg font-semibold mb-4">Edit</h2>
+        {/* Location Tabs */}
+        <div className="w-full h-fit flex justify-start items-center gap-2 -mt-2">
+          <button className="w-fit h-fit flex justify-center items-center gap-2 border-2 border-[#EBEBEC] px-4 py-2.5 rounded-full cursor-pointer">
+            <span className="inter_med text-[14px] text-[#4D4D4D]">
+              Miami, FL
+            </span>
+          </button>
 
-  {/* Dropdown-styled toggles */}
-  <div className="flex flex-col gap-4 mb-6">
-    {locations.map((location, i) => (
-      <div
-        key={i}
-        className="flex justify-between items-center bg-[#F5F5F5] px-4 py-3 rounded-xl"
-      >
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-medium">{location.city}</span>
+          <button className="w-fit h-fit flex justify-center items-center gap-2 bg-[#EBEBEC] border-2 border-[#EBEBEC] px-4 py-2.5 rounded-full cursor-pointer">
+            <span className="inter_med text-[14px] text-[#4D4D4D]">
+              Florida
+            </span>
+          </button>
         </div>
-        <label className="inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            className="sr-only peer"
-            checked={selected === i}
-            onChange={() => setSelected(i)}
-          />
-          <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-black relative after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
-        </label>
+
+        {/* Location Card */}
+        <div className="w-full h-[380px] bg-[#EBEBEC] flex flex-row gap-6 rounded-[24px] p-5">
+          {/* Map */}
+          <iframe
+            title="Map"
+            src={`https://www.google.com/maps?q=${encodeURIComponent(
+              loc.mapQuery
+            )}&output=embed`}
+            className="w-full aspect-square rounded-[14px] shadow-lg"
+          ></iframe>
+
+          {/* Details */}
+          <div className="w-full h-full flex flex-col justify-between px-4 py-2">
+            <div className="w-full h-fit flex justify-between items-center">
+              <div className="w-fit h-fit leading-5">
+                {/* Name and City */}
+                <span className="block inter_reg text-[15px] text-[#4D4D4D]">
+                  {loc.name}
+                </span>
+                <span className="block inter_med text-[15px] text-[#0D0D0D]">
+                  {loc.city}
+                </span>
+              </div>
+
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                  loc.mapQuery
+                )}`}
+                target="_blank"
+                className="w-fit h-fit flex justify-center items-center gap-1.5 border-2 border-[#D6D6D6] px-2.5 py-2 rounded-lg"
+              >
+                <span className="inter_reg text-[14px] text-[#0D0D0D]">
+                  Get Directions
+                </span>
+
+                <ChevronRight size={24} color="#323232" />
+              </a>
+            </div>
+
+            <div className="w-full h-fit">
+              <hr className="w-full border border-[#D6D6D6]" />
+
+              {/* Address and Contact Details */}
+              <div className="w-full h-fit flex justify-between items-center">
+                {/* Address  */}
+                <div className="w-full h-fit flex flex-col gap-2 mt-4">
+                  <h6 className="inter_reg text-[12px] text-[#4D4D4D]">
+                    Address
+                  </h6>
+                  <span className="block inter_reg text-[12px] text-[#0D0D0D]">
+                    97 SW 8th St
+                  </span>
+                  <span className="block inter_reg text-[12px] text-[#0D0D0D]">
+                    Miami, FL 33130
+                  </span>
+                </div>
+
+                {/* Contact details  */}
+                <div className="w-full h-fit flex flex-col gap-2 mt-4">
+                  <h6 className="inter_reg text-[12px] text-[#4D4D4D]">
+                    Contacts
+                  </h6>
+                  <span className="block inter_reg text-[12px] text-[#0D0D0D]">
+                    (305) 602-4816
+                  </span>
+                  <span className="block inter_reg text-[12px] text-[#0D0D0D]">
+                    Info@TalkinTacos.net
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    ))}
-  </div>
 
-  {/* Form Fields
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
-    <div>
-      <label className="block text-sm font-medium mb-1">Outlet name</label>
-      <input
-        type="text"
-        value={loc.name}
-        onChange={(e) => (locations[selected].name = e.target.value)}
-        className="w-full p-2 border rounded-md text-sm"
-        placeholder="Outlet name"
-      />
+      {/* Edit Section */}
+      <div className="w-full h-[350px] flex justify-center items-start overflow-hidden relative">
+        {/* Toggles  and Add Location */}
+        <div className="w-full h-fit flex flex-col justify-center items-center gap-3">
+          {/* Headings  */}
+          <h3 className="w-full poppins_med text-[#201F33] text-[14px]">
+            Edit
+          </h3>
+
+          {/* Ling Toggles and Add Locations */}
+          <div className="w-full h-fit flex flex-col gap-3 p-4">
+            {/* Location Toggles  */}
+            <div className="w-full h-fit flex flex-col gap-2">
+              <ToggleButton
+                label={"Miami, FL"}
+                showHover={true}
+                showSlider={true}
+                showArrow={true}
+              />
+              <ToggleButton
+                label={"Florida"}
+                showHover={true}
+                showSlider={true}
+                showArrow={true}
+              />
+            </div>
+
+            {/* Add Location Button  */}
+            <button className="w-full h-fit flex justify-center items-center gap-2 border-2 border-[#4B21E2] rounded-[8px] px-4 py-3 cursor-pointer">
+              <span className="poppins_reg text-[#4B21E2] text-[15px]">
+                Add more
+              </span>
+              <Plus size={16} color="#4B21E2" />
+            </button>
+          </div>
+        </div>
+
+        {/* Divider  */}
+        <hr className="h-full border border-[#E8E6ED]" />
+
+        {/* Form Fields */}
+        <div className="w-full h-full px-4 overflow-y-auto pb-15 relative">
+          <div className="w-full h-fit flex justify-between items-center gap-3">
+            <h3 className="poppins_reg text-[#0D0D0D] text-[18px]">
+              Miami, FL
+            </h3>
+            <SmButton title={"Save"} />
+          </div>
+          <form className="w-full h-fit flex flex-col gap-4 mt-4">
+            <div>
+              <label className="poppins_med text-[14px] text-black">
+                Outlet name
+              </label>
+              <TextInput
+                name={"Outlet name"}
+                placeholder={"Miami, FL"}
+                styles="text-[#201F33] placeholder:text-[#201F33]"
+              />
+            </div>
+            <div>
+              <label className="poppins_med text-[14px] text-black">
+                Location
+              </label>
+              <TextInput
+                name={"Location"}
+                placeholder={"Anywhere block - 0, Anycity, Miami, FL - Pin:69"}
+                styles="text-[#201F33] placeholder:text-[#201F33]"
+              />
+            </div>
+            <div>
+              <label className="poppins_med text-[14px] text-black">
+                Contact number
+              </label>
+              <TextInput
+                name={"Contact number"}
+                placeholder={"+91"}
+                styles="text-[#201F33] placeholder:text-[#201F33]"
+              />
+            </div>
+            <div>
+              <label className="poppins_med text-[14px] text-black">
+                E-mail
+              </label>
+              <TextInput
+                name={"E-mail"}
+                placeholder={"Enter email here "}
+                styles="text-[#201F33] placeholder:text-[#201F33]"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-    <div>
-      <label className="block text-sm font-medium mb-1">Location</label>
-      <input
-        type="text"
-        value={loc.address}
-        onChange={(e) => (locations[selected].address = e.target.value)}
-        className="w-full p-2 border rounded-md text-sm"
-        placeholder="Outlet address"
-      />
-    </div>
-    <div>
-      <label className="block text-sm font-medium mb-1">Contact number</label>
-      <input
-        type="text"
-        value={loc.phone}
-        onChange={(e) => (locations[selected].phone = e.target.value)}
-        className="w-full p-2 border rounded-md text-sm"
-        placeholder="Phone number"
-      />
-    </div>
-  </div> */}
-
-  {/* Save Button */}
-  <div className="mt-6">
-    <button className="bg-black text-white px-6 py-2 rounded-lg text-sm">
-      Save
-    </button>
-  </div>
-
-  {/* Add More Button */}
-  <div className="mt-6">
-    <button className="border border-black text-black px-6 py-2 rounded-lg text-sm font-medium">
-      Add more +
-    </button>
-  </div>
-</div>
-
-      </section>
-    </>
   );
 }
+
+export default Locations;

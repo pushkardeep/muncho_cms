@@ -11,6 +11,7 @@ import SectionMenuOption from "./SectionMenuOption";
 
 // Sections
 import Gallery from "./Sections/Gallery";
+import Locations from "./Sections/Locations";
 
 // Icons
 import {
@@ -47,7 +48,7 @@ function SectionMenu({ setIsSectionMenuOpen }) {
       <SectionMenuOption Icon={Book} label={"Menu"} />
       <SectionMenuOption Icon={SquareKanban} label={"Reviews"} />
       <SectionMenuOption Icon={MessagesSquare} label={"Faqs"} />
-      <SectionMenuOption Icon={MapPinned} label={"Locations"} />
+      <SectionMenuOption Icon={MapPinned} label={"Locations"} onClick={()=> handleSection("Locations Section", Locations)} />
     </div>
   );
 }

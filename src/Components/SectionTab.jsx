@@ -1,6 +1,6 @@
 import React from "react";
 
-function SectionTab({ Icon, title, isActive, styles = "", onClick }) {
+function SectionTab({ Icon, title, isActive, onClick, styles = "" }) {
   return (
     <div
       className={`w-full h-fit rounded-[8px] flex justify-start items-center gap-2 p-3 cursor-pointer ${

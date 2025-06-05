@@ -27,7 +27,7 @@ function Nav({ route = "Home" }) {
       <nav className="w-full h-fit flex justify-between items-center relative">
         {/* Left Part */}
         <div className="w-fit h-fit flex justify-center items-center gap-5">
-          <div className="w-fit h-fit overflow-hidden relative ml-8 sm:ml-0">
+          <div className="w-fit h-fit overflow-hidden relative">
             <img
               className="w-fit h-[50px] object-cover"
               src={"/Images/Demo/logo.png"}

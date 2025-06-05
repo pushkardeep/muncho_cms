@@ -14,7 +14,7 @@ function Gallery() {
       {/* Gallery Section */}
       <div className="w-full flex flex-col justify-center items-center gap-3">
         <div className="w-full flex flex-col justify-center items-center leading-7">
-          <h1 className="inter_med text-black text-[32px] tracking-tight">
+          <h1 className="inter_med text-black text-[32px] tracking-[-2px]">
             Title will be here
           </h1>
           <h4 className="inter_reg text-[#4D4D4D] text-[12px]">

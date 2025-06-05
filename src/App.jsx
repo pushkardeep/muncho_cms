@@ -1,30 +1,29 @@
 import React, { useState } from "react";
-import React, { useState } from "react";
+
+// Redux
+import { useSelector } from "react-redux";
+
+// Icons
 import {
   Globe,
   CirclePlus,
   LockKeyhole,
   CirclePlay,
   RefreshCcw,
+  ChevronsUpDown,
 } from "lucide-react";
 
 // Components
+import Nav from "./Components/Sections/Nav"; // Default Section
 import SectionTab from "./Components/SectionTab";
-import Nav from "./Components/Sections/Nav";
-import Hero from "./Components/Sections/Hero";
-import Footer from "./Components/Sections/Footer";
-import Locations from "./Components/Sections/Locations";
-import FAQ from "./Components/Sections/FAQ";
-import Gallery from "./Components/Sections/Gallery";
 import SectionMenu from "./Components/SectionMenu";
-import { useSelector } from "react-redux";
 
 function App() {
-  const [isSectionMenuOpen, setIsSectionMenuOpen] = useState(false);
   const [currentSection, setCurrentSection] = useState({
-    name: "Hero Section",
-    section: Hero,
+    index: 0,
+    section: Nav,
   });
+  const [isSectionMenuOpen, setIsSectionMenuOpen] = useState(false);
 
   const { sectionTabs } = useSelector((state) => state.sections);
 
@@ -117,9 +116,12 @@ function App() {
                   sectionTabs.map(({ name, section, isLocked }, index) => (
                     <SectionTab
                       key={index}
-                      Icon={LockKeyhole}
+                      Icon={isLocked ? LockKeyhole : ChevronsUpDown}
                       title={name}
-                      isActive={currentSection.name === name}
+                      isActive={index === currentSection.index}
+                      onClick={() => {
+                        setCurrentSection({ index, section });
+                      }}
                     />
                   ))}
               </div>
