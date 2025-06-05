@@ -20,22 +20,13 @@ import SectionMenu from "./Components/SectionMenu";
 function App() {
   const [activeSection, setActiveSection] = useState("Footer");
 
-  // Helper to render the correct section
-  const renderSection = () => {
-    switch (activeSection) {
-      case "Navigation Bar":
-        return <Nav />;
-      case "Hero Section":
-        return <Hero />;
-      case "Footer":
-        return <Footer />;
-      case "Locations":
-        return <Locations />;
-      case "FAQ Section":
-        return <FAQ />;
-      default:
-        return null;
-    }
+  // Map section names to components
+  const sectionComponents = {
+    "Navigation Bar": <Nav />,
+    "Hero Section": <Hero />,
+    "Footer": <Footer />,
+    "Locations": <Locations />,
+    "FAQ Section": <FAQ />,
   };
 
   return (
@@ -111,7 +102,7 @@ function App() {
                   Add Section
                 </span>
                 <CirclePlus color="white" size={24} />
-                <SectionMenu />
+                {/* <SectionMenu /> */}
               </div>
 
               {/* Secton Tabs  */}
@@ -151,7 +142,7 @@ function App() {
 
             {/* Content Editing side  */}
             <div className="flex-1 h-full overflow-hidden relative px-10">
-              {renderSection()}
+              {sectionComponents[activeSection] || null}
             </div>
           </div>
         </div>

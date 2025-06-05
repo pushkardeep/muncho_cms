@@ -19,7 +19,7 @@ function Nav({ route = "Home" }) {
       <TabHeading
         title={"Navigation Bar"}
         description={
-          "The Naviagtion Bar comes on the top of the website. Your customers cannavigate to different sections and go to the ordering platformdirectly."
+          "The Navigation Bar comes on the top of the website. Your customers can navigate to different sections and go to the ordering platform directly."
         }
       />
 

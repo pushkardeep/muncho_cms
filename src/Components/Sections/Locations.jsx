@@ -1,155 +1,178 @@
 import React, { useState } from "react";
+import TabHeading from "../Common/TabHeading";
 
 export default function Locations() {
-  const [locations, setLocations] = useState([
+  const locations = [
     {
-      name: "Head Office",
-      city: "New York",
-      address: "123 Main St, New York, NY",
-      phone: "(555) 123-4567",
-      email: "info@company.com",
-      mapQuery: "123 Main St, New York, NY",
-      lat: "",
-      lng: ""
+      name: "Talkin' Tacos",
+      city: "Miami, FL",
+      address: "97 SW 8th St, Miami, FL 33130",
+      phone: "(305) 602-4816",
+      email: "info@talkintacos.net",
+      mapQuery: "97 SW 8th St, Miami, FL 33130"
+    },
+    {
+      name: "Another Location",
+      city: "Florida",
+      address: "456 Ocean Dr, Florida",
+      phone: "(123) 456-7890",
+      email: "contact@anotherlocation.com",
+      mapQuery: "456 Ocean Dr, Florida"
     }
-  ]);
+  ];
+
   const [selected, setSelected] = useState(0);
-  const [edit, setEdit] = useState(false);
-  const [form, setForm] = useState(locations[0]);
-
-  const handleSelect = (i) => {
-    setSelected(i);
-    setForm(locations[i]);
-    setEdit(false);
-  };
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const handleSave = () => {
-    const updated = [...locations];
-    updated[selected] = form;
-    setLocations(updated);
-    setEdit(false);
-  };
-
-  const handleAdd = () => {
-    setLocations([
-      ...locations,
-      { name: "", city: "", address: "", phone: "", email: "", mapQuery: "", lat: "", lng: "" }
-    ]);
-    setSelected(locations.length);
-    setForm({ name: "", city: "", address: "", phone: "", email: "", mapQuery: "", lat: "", lng: "" });
-    setEdit(true);
-  };
-
   const loc = locations[selected];
-  if (!loc) return null;
 
   return (
     <>
+      <div className="w-full h-fit">
+        <TabHeading
+          title={"Locations"}
+          description={
+            "The Location section comes before the footer usually. You can list location of your outlets here."
+          }
+        />
+      </div>
 
-       <div className="w-full h-fit">
-        <h1 className="poppins_med text-[#201F33] text-[18px]">
-       Location
-        </h1>
-      
-      </div>
-    <section className="w-full px-4 md:px-[110px] py-[60px] font-inter">
-   
-      <h1 className="capitalize text-[32px] md:text-[40px] leading-[1.2] tracking-tight font-medium pb-8">
-       Locations
-      </h1>
-      <div className="mb-4 flex gap-2 flex-wrap">
-        {locations.map((location, i) => (
-          <button
-            key={i}
-            onClick={() => handleSelect(i)}
-            className={`rounded-full px-5 py-2 text-sm font-medium transition ${selected === i ? "bg-white text-black border border-[#EBEBEC]" : "bg-[#EBEBEC] text-black"}`}
-          >
-            {location.name || `Location ${i + 1}`}
-          </button>
-        ))}
-        <button
-          onClick={handleAdd}
-          className="rounded-full px-5 py-2 text-sm font-medium bg-[#4B21E2] text-white border border-[#4B21E2]"
-        >
-          + Add Location
-        </button>
-      </div>
-      {edit ? (
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-[#F7F7FA] p-6 rounded-xl" onSubmit={e => { e.preventDefault(); handleSave(); }}>
-          <div>
-            <label className="block mb-1 font-medium">Name</label>
-            <input name="name" value={form.name} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">City</label>
-            <input name="city" value={form.city} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Address</label>
-            <input name="address" value={form.address} onChange={handleChange} className="w-full border rounded px-3 py-2" required />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Phone</label>
-            <input name="phone" value={form.phone} onChange={handleChange} className="w-full border rounded px-3 py-2" />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Email</label>
-            <input name="email" value={form.email} onChange={handleChange} className="w-full border rounded px-3 py-2" />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Map Query</label>
-            <input name="mapQuery" value={form.mapQuery} onChange={handleChange} className="w-full border rounded px-3 py-2" />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Latitude</label>
-            <input name="lat" value={form.lat} onChange={handleChange} className="w-full border rounded px-3 py-2" placeholder="e.g. 40.7128" />
-          </div>
-          <div>
-            <label className="block mb-1 font-medium">Longitude</label>
-            <input name="lng" value={form.lng} onChange={handleChange} className="w-full border rounded px-3 py-2" placeholder="e.g. -74.0060" />
-          </div>
-          <div className="col-span-2 flex gap-3 mt-4">
-            <button type="submit" className="bg-[#4B21E2] text-white px-6 py-2 rounded">Save</button>
-            <button type="button" className="bg-gray-200 px-6 py-2 rounded" onClick={() => setEdit(false)}>Cancel</button>
-          </div>
-        </form>
-      ) : (
-        <div className="bg-[#EBEBEC] p-6 rounded-2xl flex flex-col gap-4">
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-xl font-semibold">{loc.name}</h3>
-              <p className="text-lg text-gray-700">{loc.city}</p>
-            </div>
-            <button className="text-[#4B21E2] underline" onClick={() => setEdit(true)}>Edit</button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t pt-4 text-sm text-gray-800">
-            <div>
-              <p className="font-medium mb-1">Address</p>
-              <p>{loc.address}</p>
-            </div>
-            <div>
-              <p className="font-medium mb-1">Contacts</p>
-              <p>{loc.phone}</p>
-              <p>{loc.email}</p>
-            </div>
-          </div>
+      <section className="w-full px-4 py-8 font-inter">
+        <h1 className="text-[28px] md:text-[32px] font-semibold mb-6">Our locations</h1>
+
+        {/* Location Tabs */}
+        <div className="flex gap-2 mb-6">
+          {locations.map((location, i) => (
+            <button
+              key={i}
+              onClick={() => setSelected(i)}
+              className={`px-5 py-2 rounded-full text-sm font-medium ${
+                selected === i
+                  ? "bg-black text-white"
+                  : "bg-[#EBEBEC] text-black"
+              }`}
+            >
+              {location.city}
+            </button>
+          ))}
+        </div>
+
+        {/* Location Card */}
+        <div className="bg-[#F5F5F5] rounded-2xl p-6 flex flex-col md:flex-row gap-6">
+          {/* Map */}
           <iframe
             title="Map"
-            src={
-              loc.lat && loc.lng
-                ? `https://www.google.com/maps?q=${loc.lat},${loc.lng}&output=embed`
-                : `https://www.google.com/maps?q=${encodeURIComponent(loc.mapQuery)}&output=embed`
-            }
-            className="w-full h-[220px] md:h-[300px] rounded-[14px] border-0 mt-4"
-          />
+            src={`https://www.google.com/maps?q=${encodeURIComponent(loc.mapQuery)}&output=embed`}
+            className="w-full md:w-1/2 h-[240px] md:h-[300px] rounded-xl border-0"
+          ></iframe>
+
+          {/* Details */}
+          <div className="flex flex-col justify-between w-full">
+            <div>
+              <h2 className="text-xl font-semibold">{loc.name}</h2>
+              <p className="text-sm text-gray-600 mb-4">{loc.city}</p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-800 border-t pt-4">
+                <div>
+                  <p className="font-semibold mb-1">Address</p>
+                  <p>{loc.address}</p>
+                </div>
+                <div>
+                  <p className="font-semibold mb-1">Contacts</p>
+                  <p>{loc.phone}</p>
+                  <p>{loc.email}</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(loc.mapQuery)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block text-sm font-medium text-white bg-black px-4 py-2 rounded-lg"
+              >
+                Get Directions
+              </a>
+            </div>
+          </div>
         </div>
-      )}
-    </section>
+
+        {/* Edit Section */}
+<div className="mt-10">
+  <h2 className="text-lg font-semibold mb-4">Edit</h2>
+
+  {/* Dropdown-styled toggles */}
+  <div className="flex flex-col gap-4 mb-6">
+    {locations.map((location, i) => (
+      <div
+        key={i}
+        className="flex justify-between items-center bg-[#F5F5F5] px-4 py-3 rounded-xl"
+      >
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium">{location.city}</span>
+        </div>
+        <label className="inline-flex items-center cursor-pointer">
+          <input
+            type="checkbox"
+            className="sr-only peer"
+            checked={selected === i}
+            onChange={() => setSelected(i)}
+          />
+          <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-black relative after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full" />
+        </label>
+      </div>
+    ))}
+  </div>
+
+  {/* Form Fields
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl">
+    <div>
+      <label className="block text-sm font-medium mb-1">Outlet name</label>
+      <input
+        type="text"
+        value={loc.name}
+        onChange={(e) => (locations[selected].name = e.target.value)}
+        className="w-full p-2 border rounded-md text-sm"
+        placeholder="Outlet name"
+      />
+    </div>
+    <div>
+      <label className="block text-sm font-medium mb-1">Location</label>
+      <input
+        type="text"
+        value={loc.address}
+        onChange={(e) => (locations[selected].address = e.target.value)}
+        className="w-full p-2 border rounded-md text-sm"
+        placeholder="Outlet address"
+      />
+    </div>
+    <div>
+      <label className="block text-sm font-medium mb-1">Contact number</label>
+      <input
+        type="text"
+        value={loc.phone}
+        onChange={(e) => (locations[selected].phone = e.target.value)}
+        className="w-full p-2 border rounded-md text-sm"
+        placeholder="Phone number"
+      />
+    </div>
+  </div> */}
+
+  {/* Save Button */}
+  <div className="mt-6">
+    <button className="bg-black text-white px-6 py-2 rounded-lg text-sm">
+      Save
+    </button>
+  </div>
+
+  {/* Add More Button */}
+  <div className="mt-6">
+    <button className="border border-black text-black px-6 py-2 rounded-lg text-sm font-medium">
+      Add more +
+    </button>
+  </div>
+</div>
+
+      </section>
     </>
-    
   );
 }
