@@ -34,12 +34,16 @@ function Footer() {
   const { links, legalLinks } = footerData;
 
   const handleLinksToggling = (index) => {
+    const linksCopy = [...links];
+    linksCopy[index] = {
+      ...linksCopy[index],
+      enabled: !linksCopy[index].enabled,
+    };
+
     setFooterData((prev) => {
       return {
         ...prev,
-        links: prev.links.map((elem, linkIndex) =>
-          linkIndex === index ? { ...elem, enabled: !elem.enabled } : elem
-        ),
+        links: linksCopy,
       };
     });
   };

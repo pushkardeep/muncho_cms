@@ -11,11 +11,12 @@ function ToggleButton({
   showArrow = false,
   isEnabled = false,
   onToggle,
+  onClick
 }) {
   const [switchon, setSwitchon] = useState(false);
   return (
-    <div
-      className={`w-full h-fit flex justify-between items-center gap-2 p-4 rounded-[8px] ${
+    <div onClick={onClick}
+      className={`w-full h-fit flex justify-between items-center gap-2 p-4 rounded-[8px] cursor-pointer ${
         showHover ? "hover:bg-[#EEEBFA] transition-colors duration-200" : ""
       } ${isActive ? "bg-[#EEEBFA]" : "bg-transparent"}`}
     >
