@@ -21,4 +21,7 @@ const locationSchema = new mongoose.Schema({
   },
 });
 
-export const LocationSection = SectionModel.discriminator("Location", locationSchema);
+export const LocationSection = SectionModel.discriminator(
+  "Location",
+  locationSchema
+);

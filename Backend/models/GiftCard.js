@@ -14,4 +14,7 @@ const giftCardSchema = new mongoose.Schema({
   },
 });
 
-export const GiftCardSection = SectionModel.discriminator("Gift_Card", giftCardSchema);
+export const GiftCardSection = SectionModel.discriminator(
+  "Gift_Card",
+  giftCardSchema
+);

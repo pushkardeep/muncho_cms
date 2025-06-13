@@ -17,4 +17,7 @@ const gallerySchema = new mongoose.Schema({
   },
 });
 
-export const GallerySection = SectionModel.discriminator("Gallery", gallerySchema);
+export const GallerySection = SectionModel.discriminator(
+  "Gallery",
+  gallerySchema
+);
