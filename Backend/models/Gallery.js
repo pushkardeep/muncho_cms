@@ -1,16 +1,20 @@
 // Gallery section model
-const mongoose = require('mongoose');
+import { SectionModel } from "./SectionBase";
+import mongoose from "mongoose";
 
-const GallerySchema = new mongoose.Schema({
-  title: { type: String, default: '' },
-  subtitle: { type: String, default: '' },
-  images: [
-    {
-      src: { type: String, default: '' },
-      alt: { type: String, default: '' },
+const gallerySchema = new mongoose.Schema({
+  data: {
+    headings: {
+      heading: { type: String, required: true },
+      subHeading: { type: String },
     },
-  ],
-  createdAt: { type: Date, default: Date.now },
+    images: [
+      {
+        src: { type: String, required: true },
+        alt: { type: String },
+      },
+    ],
+  },
 });
 
-module.exports = mongoose.model('Gallery', GallerySchema);
+export const GallerySection = SectionModel.discriminator("Gallery", gallerySchema);

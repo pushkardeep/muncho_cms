@@ -1,17 +1,19 @@
 // FAQ section model
-const mongoose = require('mongoose');
+import { SectionModel } from "./SectionBase";
+import mongoose from "mongoose";
 
-const FAQSchema = new mongoose.Schema({
-  heading: {
-    title: { type: String, default: '' },
-  },
-  questions: [
-    {
+const faqSchema = new mongoose.Schema({
+  data: {
+    heading: {
       title: { type: String, required: true },
-      description: { type: String, required: true },
     },
-  ],
-  createdAt: { type: Date, default: Date.now },
+    questions: [
+      {
+        question: { type: String, required: true },
+        answer: { type: String, required: true },
+      },
+    ],
+  },
 });
 
-module.exports = mongoose.model('FAQ', FAQSchema);
+export const FAQSection = SectionModel.discriminator("FAQ", faqSchema);

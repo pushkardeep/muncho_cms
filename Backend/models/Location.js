@@ -1,14 +1,24 @@
-// Location section model
-const mongoose = require('mongoose');
+import { SectionModel } from "./SectionBase";
+import mongoose from "mongoose";
 
-const LocationSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  city: { type: String, required: true },
-  address: { type: String, required: true },
-  phone: { type: String, required: true },
-  email: { type: String, required: true },
-  mapQuery: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now },
+const locationSchema = new mongoose.Schema({
+  data: {
+    headings: {
+      heading: { type: String, required: true },
+    },
+    locations: [
+      {
+        name: { type: String, required: true },
+        city: { type: String, required: true },
+        address: { type: String, required: true },
+        phone: { type: String, required: true },
+        email: { type: String, required: true },
+        mapQuery: { type: String, required: true },
+        longitude: { type: String, required: true },
+        latitude: { type: String, required: true },
+      },
+    ],
+  },
 });
 
-module.exports = mongoose.model('Location', LocationSchema);
+export const LocationSection = SectionModel.discriminator("Location", locationSchema);

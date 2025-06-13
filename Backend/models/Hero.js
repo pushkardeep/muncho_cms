@@ -1,16 +1,18 @@
-// Hero section model
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import { SectionModel } from './SectionBase';
 
-const HeroSchema = new mongoose.Schema({
-  text: {
-    title: { type: String, default: '' },
-    heroText: { type: String, default: '' },
+// Hero section model
+const heroSchema = new mongoose.Schema({
+  data: {
+    text: {
+      title: { type: String, required: true },
+      heroText: { type: String, require: true },
+    },
+    bg_image: {
+      src: { type: String, required: true },
+      alt: { type: String },
+    },
   },
-  bg_image: {
-    src: { type: String, default: '' },
-    alt: { type: String, default: '' },
-  },
-  createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Hero', HeroSchema);
+export const HeroSection = SectionModel.discriminator('Hero', heroSchema);

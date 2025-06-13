@@ -1,49 +1,20 @@
 // Footer section model
-const mongoose = require('mongoose');
+import { SectionModel } from "./SectionBase";
+import mongoose from "mongoose";
 
-const FooterSchema = new mongoose.Schema({
-  links: {
-    column1: [
+const footerSchema = new mongoose.Schema({
+  data: {
+    logo: {
+      src: { type: String, required: true },
+      alt: { type: String },
+    },
+    links: [
       {
-        label: { type: String, required: true },
-        href: { type: String, required: true },
-        enabled: { type: Boolean, default: true },
-      },
-    ],
-    column2: [
-      {
-        label: { type: String, required: true },
-        href: { type: String, required: true },
-        enabled: { type: Boolean, default: true },
-      },
-    ],
-    column3: [
-      {
-        label: { type: String, required: true },
-        href: { type: String, required: true },
-        enabled: { type: Boolean, default: true },
+        title: { type: String, required: true },
+        link: { type: String, required: true },
       },
     ],
   },
-  legalLinks: [
-    {
-      label: { type: String, required: true },
-      href: { type: String, required: true },
-    },
-  ],
-  socialLinks: [
-    {
-      icon: { type: String, required: true },
-      href: { type: String, required: true },
-      alt: { type: String, required: true },
-    },
-  ],
-  madeWith: { type: String, default: '' },
-  cta: {
-    label: { type: String, default: '' },
-    href: { type: String, default: '' },
-  },
-  createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Footer', FooterSchema);
+export const FooterSection = SectionModel.discriminator("Footer", footerSchema);

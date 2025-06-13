@@ -1,6 +1,6 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Data = require('../models/Data');
+const Data = require("../models/Data");
 
 // Middleware example: log request method and path
 router.use((req, res, next) => {
@@ -9,7 +9,7 @@ router.use((req, res, next) => {
 });
 
 // POST: Upload data
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { title, content } = req.body;
     const newData = new Data({ title, content });
@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
 });
 
 // GET: Retrieve all data for preview
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const data = await Data.find().sort({ createdAt: -1 });
     res.json(data);
