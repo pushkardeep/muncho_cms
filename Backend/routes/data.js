@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const Data = require("../models/Data");
+const connectDB = require("../lib/db");
+
+connectDB();
 
 // Middleware example: log request method and path
 router.use((req, res, next) => {

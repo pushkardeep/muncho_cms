@@ -1,10 +1,13 @@
 // Location section routes
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Location = require('../models/Location');
+const Location = require("../models/Location");
+const connectDB = require("../lib/db");
+
+connectDB();
 
 // GET: Retrieve all locations
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const locations = await Location.find().sort({ createdAt: -1 });
     res.json(locations);
@@ -14,10 +17,17 @@ router.get('/', async (req, res) => {
 });
 
 // POST: Add a new location
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { name, city, address, phone, email, mapQuery } = req.body;
-    const location = new Location({ name, city, address, phone, email, mapQuery });
+    const location = new Location({
+      name,
+      city,
+      address,
+      phone,
+      email,
+      mapQuery,
+    });
     await location.save();
     res.status(201).json(location);
   } catch (err) {
@@ -26,7 +36,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT: Update a location by id
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const { name, city, address, phone, email, mapQuery } = req.body;
     const location = await Location.findByIdAndUpdate(
@@ -41,10 +51,10 @@ router.put('/:id', async (req, res) => {
 });
 
 // DELETE: Remove a location by id
-router.delete('/:id', async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     await Location.findByIdAndDelete(req.params.id);
-    res.json({ message: 'Location deleted' });
+    res.json({ message: "Location deleted" });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

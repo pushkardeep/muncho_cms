@@ -1,10 +1,14 @@
 // FAQ section routes
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const FAQ = require('../models/FAQ');
+const FAQ = require("../models/FAQ");
+const connectDB = require("../lib/db");
+
+// Connect to database
+connectDB();
 
 // GET: Retrieve FAQ section (assume single document)
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const faq = await FAQ.findOne().sort({ createdAt: -1 });
     res.json(faq);
@@ -14,7 +18,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST: Create FAQ section
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { heading, questions } = req.body;
     const faq = new FAQ({ heading, questions });
@@ -26,7 +30,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT: Update FAQ section (by id)
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const { heading, questions } = req.body;
     const faq = await FAQ.findByIdAndUpdate(

@@ -1,10 +1,14 @@
 // Hero section routes
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Hero = require('../models/Hero');
+const Hero = require("../models/Hero");
+const connectDB = require("../lib/db");
+
+// Connect to database
+connectDB();
 
 // GET: Retrieve hero section (assume single document)
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const hero = await Hero.findOne().sort({ createdAt: -1 });
     res.json(hero);
@@ -14,7 +18,7 @@ router.get('/', async (req, res) => {
 });
 
 // POST: Create hero section
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { text, bg_image } = req.body;
     const hero = new Hero({ text, bg_image });
@@ -26,7 +30,7 @@ router.post('/', async (req, res) => {
 });
 
 // PUT: Update hero section (by id)
-router.put('/:id', async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const { text, bg_image } = req.body;
     const hero = await Hero.findByIdAndUpdate(
