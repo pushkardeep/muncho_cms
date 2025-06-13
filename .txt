@@ -1,0 +1,50 @@
+API Endpoints for Frontend Integration
+=====================================
+
+Base URL: http://localhost:5000/api
+
+1. Hero Section (/api/hero)
+   - GET    /api/hero           → Get the current hero section
+   - POST   /api/hero           → Create a new hero section (body: { text, bg_image })
+   - PUT    /api/hero/:id       → Update hero section by ID
+
+2. Gallery Section (/api/gallery)
+   - GET    /api/gallery        → Get the current gallery section
+   - POST   /api/gallery        → Create a new gallery (body: { title, subtitle, images })
+   - PUT    /api/gallery/:id    → Update gallery by ID
+
+3. Location Section (/api/location)
+   - GET    /api/location       → Get all locations
+   - POST   /api/location       → Add a new location (body: { name, city, address, phone, email, mapQuery })
+   - PUT    /api/location/:id   → Update a location by ID
+   - DELETE /api/location/:id   → Delete a location by ID
+
+4. FAQ Section (/api/faq)
+   - GET    /api/faq            → Get the FAQ section
+   - POST   /api/faq            → Create FAQ (body: { heading, questions })
+   - PUT    /api/faq/:id        → Update FAQ by ID
+
+5. Footer Section (/api/footer)
+   - GET    /api/footer         → Get the footer section
+   - POST   /api/footer         → Create footer (body: { links, legalLinks, socialLinks, madeWith, cta })
+   - PUT    /api/footer/:id     → Update footer by ID
+
+6. Data (General) (/api/data)
+   - GET    /api/data           → Get all data
+   - POST   /api/data           → Upload data (body: { title, content })
+
+How to use:
+- For GET requests, fetch data to display.
+- For POST/PUT, send JSON in the request body.
+- For DELETE, use the location ID in the URL.
+
+Example fetch (GET):
+fetch('http://localhost:5000/api/hero').then(res => res.json())
+
+Example fetch (POST):
+fetch('http://localhost:5000/api/hero', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ text: {...}, bg_image: {...} })
+})
+.then(res => res.json())
