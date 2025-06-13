@@ -1,5 +1,5 @@
-import { SectionModel } from "./SectionBase";
-import mongoose from "mongoose";
+const SectionModel = require("./SectionBase");
+const mongoose = require("mongoose");
 
 const navbarSchema = new mongoose.Schema({
   data: {
@@ -24,4 +24,5 @@ const navbarSchema = new mongoose.Schema({
   },
 });
 
-export const NavbarSection = SectionModel.discriminator("Navbar", navbarSchema);
+const NavbarSection = SectionModel.discriminator("Navbar", navbarSchema);
+module.exports = NavbarSection;

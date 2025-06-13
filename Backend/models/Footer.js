@@ -1,6 +1,6 @@
 // Footer section model
-import { SectionModel } from "./SectionBase";
-import mongoose from "mongoose";
+const SectionModel = require("./SectionBase");
+const mongoose = require("mongoose");
 
 const footerSchema = new mongoose.Schema({
   data: {
@@ -17,4 +17,5 @@ const footerSchema = new mongoose.Schema({
   },
 });
 
-export const FooterSection = SectionModel.discriminator("Footer", footerSchema);
+const FooterSection = SectionModel.discriminator("Footer", footerSchema);
+module.exports = FooterSection;

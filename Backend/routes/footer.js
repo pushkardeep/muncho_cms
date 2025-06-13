@@ -1,15 +1,15 @@
 // Footer section routes
 const express = require("express");
-const router = express.Router();
-const Footer = require("../models/Footer");
-const connectDB = require("../lib/db");
+const FooterSection = require("../models/Footer.js");
+const connectDB = require("../lib/db.js");
 
+const router = express.Router();
 connectDB();
 
 // GET: Retrieve Footer section (assume single document)
 router.get("/", async (req, res) => {
   try {
-    const footer = await Footer.findOne().sort({ createdAt: -1 });
+    const footer = await FooterSection.findOne().sort({ createdAt: -1 });
     res.json(footer);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -19,14 +19,8 @@ router.get("/", async (req, res) => {
 // POST: Create Footer section
 router.post("/", async (req, res) => {
   try {
-    const { links, legalLinks, socialLinks, madeWith, cta } = req.body;
-    const footer = new Footer({
-      links,
-      legalLinks,
-      socialLinks,
-      madeWith,
-      cta,
-    });
+    const { data } = req.body;
+    const footer = new FooterSection({ data });
     await footer.save();
     res.status(201).json(footer);
   } catch (err) {
@@ -37,10 +31,10 @@ router.post("/", async (req, res) => {
 // PUT: Update Footer section (by id)
 router.put("/:id", async (req, res) => {
   try {
-    const { links, legalLinks, socialLinks, madeWith, cta } = req.body;
-    const footer = await Footer.findByIdAndUpdate(
+    const { data } = req.body;
+    const footer = await FooterSection.findByIdAndUpdate(
       req.params.id,
-      { links, legalLinks, socialLinks, madeWith, cta },
+      { data },
       { new: true }
     );
     res.json(footer);

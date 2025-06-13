@@ -1,5 +1,5 @@
-import { SectionModel } from "./SectionBase";
-import mongoose from "mongoose";
+const SectionModel = require("./SectionBase");
+const mongoose = require("mongoose");
 
 const locationSchema = new mongoose.Schema({
   data: {
@@ -21,7 +21,5 @@ const locationSchema = new mongoose.Schema({
   },
 });
 
-export const LocationSection = SectionModel.discriminator(
-  "Location",
-  locationSchema
-);
+const LocationSection = SectionModel.discriminator("Location", locationSchema);
+module.exports = LocationSection;

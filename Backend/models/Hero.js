@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import { SectionModel } from "./SectionBase";
+const mongoose = require("mongoose");
+const SectionModel = require("./SectionBase");
 
 // Hero section model
 const heroSchema = new mongoose.Schema({
@@ -15,4 +15,5 @@ const heroSchema = new mongoose.Schema({
   },
 });
 
-export const HeroSection = SectionModel.discriminator("Hero", heroSchema);
+const HeroSection = SectionModel.discriminator("Hero", heroSchema);
+module.exports = HeroSection;

@@ -1,60 +1,45 @@
 // Location section routes
 const express = require("express");
-const router = express.Router();
-const Location = require("../models/Location");
-const connectDB = require("../lib/db");
+const LocationSection = require("../models/Location.js");
+const connectDB = require("../lib/db.js");
 
+const router = express.Router();
 connectDB();
 
-// GET: Retrieve all locations
+// GET: Retrieve all locations (as a section)
 router.get("/", async (req, res) => {
   try {
-    const locations = await Location.find().sort({ createdAt: -1 });
-    res.json(locations);
+    const locationSection = await LocationSection.findOne().sort({
+      createdAt: -1,
+    });
+    res.json(locationSection);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// POST: Add a new location
+// POST: Add a new location section
 router.post("/", async (req, res) => {
   try {
-    const { name, city, address, phone, email, mapQuery } = req.body;
-    const location = new Location({
-      name,
-      city,
-      address,
-      phone,
-      email,
-      mapQuery,
-    });
-    await location.save();
-    res.status(201).json(location);
+    const { data } = req.body;
+    const locationSection = new LocationSection({ data });
+    await locationSection.save();
+    res.status(201).json(locationSection);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-// PUT: Update a location by id
+// PUT: Update a location section by id
 router.put("/:id", async (req, res) => {
   try {
-    const { name, city, address, phone, email, mapQuery } = req.body;
-    const location = await Location.findByIdAndUpdate(
+    const { data } = req.body;
+    const locationSection = await LocationSection.findByIdAndUpdate(
       req.params.id,
-      { name, city, address, phone, email, mapQuery },
+      { data },
       { new: true }
     );
-    res.json(location);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
-  }
-});
-
-// DELETE: Remove a location by id
-router.delete("/:id", async (req, res) => {
-  try {
-    await Location.findByIdAndDelete(req.params.id);
-    res.json({ message: "Location deleted" });
+    res.json(locationSection);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

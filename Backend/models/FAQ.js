@@ -1,6 +1,6 @@
 // FAQ section model
-import { SectionModel } from "./SectionBase";
-import mongoose from "mongoose";
+const SectionModel = require("./SectionBase");
+const mongoose = require("mongoose");
 
 const faqSchema = new mongoose.Schema({
   data: {
@@ -16,4 +16,5 @@ const faqSchema = new mongoose.Schema({
   },
 });
 
-export const FAQSection = SectionModel.discriminator("FAQ", faqSchema);
+const FAQSection = SectionModel.discriminator("FAQ", faqSchema);
+module.exports = FAQSection;

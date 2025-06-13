@@ -1,5 +1,5 @@
-import { SectionModel } from "./SectionBase";
-import mongoose from "mongoose";
+const SectionModel = require("./SectionBase");
+const mongoose = require("mongoose");
 
 const giftCardSchema = new mongoose.Schema({
   data: {
@@ -14,7 +14,5 @@ const giftCardSchema = new mongoose.Schema({
   },
 });
 
-export const GiftCardSection = SectionModel.discriminator(
-  "Gift_Card",
-  giftCardSchema
-);
+const GiftCardSection = SectionModel.discriminator("Gift_Card", giftCardSchema);
+module.exports = GiftCardSection;

@@ -1,16 +1,15 @@
 // Gallery section routes
 const express = require("express");
-const router = express.Router();
-const Gallery = require("../models/Gallery");
-const connectDB = require("../lib/db");
+const GallerySection = require("../models/Gallery.js");
+const connectDB = require("../lib/db.js");
 
-// Connect to database
+const router = express.Router();
 connectDB();
 
 // GET: Retrieve gallery section (assume single document)
 router.get("/", async (req, res) => {
   try {
-    const gallery = await Gallery.findOne().sort({ createdAt: -1 });
+    const gallery = await GallerySection.findOne().sort({ createdAt: -1 });
     res.json(gallery);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -20,8 +19,8 @@ router.get("/", async (req, res) => {
 // POST: Create gallery section
 router.post("/", async (req, res) => {
   try {
-    const { title, subtitle, images } = req.body;
-    const gallery = new Gallery({ title, subtitle, images });
+    const { data } = req.body;
+    const gallery = new GallerySection({ data });
     await gallery.save();
     res.status(201).json(gallery);
   } catch (err) {
@@ -32,10 +31,10 @@ router.post("/", async (req, res) => {
 // PUT: Update gallery section (by id)
 router.put("/:id", async (req, res) => {
   try {
-    const { title, subtitle, images } = req.body;
-    const gallery = await Gallery.findByIdAndUpdate(
+    const { data } = req.body;
+    const gallery = await GallerySection.findByIdAndUpdate(
       req.params.id,
-      { title, subtitle, images },
+      { data },
       { new: true }
     );
     res.json(gallery);

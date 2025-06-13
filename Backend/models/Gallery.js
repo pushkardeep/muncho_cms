@@ -1,6 +1,6 @@
 // Gallery section model
-import { SectionModel } from "./SectionBase";
-import mongoose from "mongoose";
+const SectionModel = require("./SectionBase");
+const mongoose = require("mongoose");
 
 const gallerySchema = new mongoose.Schema({
   data: {
@@ -17,7 +17,5 @@ const gallerySchema = new mongoose.Schema({
   },
 });
 
-export const GallerySection = SectionModel.discriminator(
-  "Gallery",
-  gallerySchema
-);
+const GallerySection = SectionModel.discriminator("Gallery", gallerySchema);
+module.exports = GallerySection;

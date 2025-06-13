@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const SectionBaseSchema = new mongoose.Schema(
   {
@@ -8,4 +8,4 @@ const SectionBaseSchema = new mongoose.Schema(
   { timestamps: true, discriminatorKey: "type" }
 );
 
-export const SectionModel = mongoose.model("Section", SectionBaseSchema);
+module.exports = mongoose.model("Section", SectionBaseSchema);
