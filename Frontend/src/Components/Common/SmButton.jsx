@@ -5,10 +5,12 @@ function SmButton({
   iconSize,
   iconColor,
   title,
+  onClick,
   styles = "",
 }) {
   return (
     <button
+      onClick={onClick}
       className={`w-fit h-fit bg-black flex justify-center items-center gap-2 rounded-[8px] px-5 py-2 cursor-pointer ${styles}`}
     >
       {Icon && <Icon color={iconColor} size={iconSize} />}

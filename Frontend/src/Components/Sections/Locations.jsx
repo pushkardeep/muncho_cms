@@ -9,28 +9,95 @@ import TextInput from "../Common/TextInput";
 import SmButton from "../Common/SmButton";
 import ToggleButton from "../Common/ToggleButton";
 
-function Locations() {
-  const locations = [
-    {
-      name: "Talkin' Tacos",
-      city: "Miami, FL",
-      address: "97 SW 8th St, Miami, FL 33130",
-      phone: "(305) 602-4816",
-      email: "info@talkintacos.net",
-      mapQuery: "97 SW 8th St, Miami, FL 33130",
-    },
-    {
-      name: "Another Location",
-      city: "Florida",
-      address: "456 Ocean Dr, Florida",
-      phone: "(123) 456-7890",
-      email: "contact@anotherlocation.com",
-      mapQuery: "456 Ocean Dr, Florida",
-    },
-  ];
+const demoLocations = [
+  {
+    name: "Talkin' Tacos",
+    city: "Miami, FL",
+    phone: "(305) 602-4816",
+    email: "info@talkintacos.net",
+    mapQuery: "97 SW 8th St, Miami, FL 33130",
+  },
+  {
+    name: "Another Location",
+    city: "Florida",
+    phone: "(123) 456-7890",
+    email: "contact@anotherlocation.com",
+    mapQuery: "456 Ocean Dr, Florida",
+  },
+];
 
-  const [selected, setSelected] = useState(0);
-  const loc = locations[selected];
+function Locations() {
+  const [locations, setLocations] = useState(demoLocations);
+  const [activeLocation, setactiveLocation] = useState(0);
+
+  const [location, setLocation] = useState({
+    name: "",
+    city: "",
+    address: "",
+    phone: "",
+    email: "",
+    mapQuery: "",
+  });
+
+  const loc = locations[activeLocation];
+
+  const handleSetActiveLocation = (index) => {
+    setactiveLocation(index);
+    setLocation(locations[index]);
+  };
+
+  const handleNextLocation = () => {
+    if (activeLocation === locations.length - 1) return;
+    handleSetActiveLocation(activeLocation + 1);
+  };
+
+  const handlePreviousLocation = () => {
+    if (activeLocation === 0) return;
+    handleSetActiveLocation(activeLocation - 1);
+  };
+
+  const handleAddLoaction = () => {
+    handleSetActiveLocation(locations.length);
+    setLocations((prev) => {
+      return [
+        ...prev,
+        {
+          name: "",
+          city: "",
+          phone: "",
+          email: "",
+          mapQuery: "",
+        },
+      ];
+    });
+
+    resetLocation();
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setLocation((prev) => {
+      return { ...prev, [name]: value };
+    });
+  };
+
+  // Saves the updated data of a location object
+  const handleSave = () => {
+    const locationsCopy = [...locations];
+    locationsCopy[activeLocation] = location;
+
+    setLocations(locationsCopy); // Updates the locations Array
+  };
+
+  const resetLocation = () => {
+    setLocation({
+      name: "",
+      city: "",
+      phone: "",
+      email: "",
+      mapQuery: "",
+    });
+  };
 
   return (
     <div className="w-full h-full min-h-fit flex flex-col justify-between items-center gap-10 overflow-hidden relative">
@@ -50,11 +117,27 @@ function Locations() {
           </h1>
 
           <div className="w-fit h-fit flex justify-center items-center gap-2">
-            <button className="w-fix h-fit aspect-square bg-[#EBEBEC] rounded-full shadow-2xl p-2 cursor-pointer">
+            <button
+              onClick={handlePreviousLocation}
+              disabled={activeLocation === 0}
+              className={`w-fix h-fit aspect-square bg-[#EBEBEC] rounded-full shadow-2xl p-2 ${
+                activeLocation === 0
+                  ? "opacity-40 cursor-not-allowed"
+                  : "cursor-pointer"
+              }`}
+            >
               <ChevronLeft size={24} color="#323232" />
             </button>
 
-            <button className="w-fix h-fit aspect-square bg-[#EBEBEC] rounded-full shadow-2xl p-2 cursor-pointer">
+            <button
+              onClick={handleNextLocation}
+              disabled={activeLocation === locations.length - 1}
+              className={`w-fix h-fit aspect-square bg-[#EBEBEC] rounded-full shadow-2xl p-2 ${
+                activeLocation === locations.length - 1
+                  ? "opacity-40 cursor-not-allowed"
+                  : "cursor-pointer"
+              }`}
+            >
               <ChevronRight size={24} color="#323232" />
             </button>
           </div>
@@ -62,17 +145,21 @@ function Locations() {
 
         {/* Location Tabs */}
         <div className="w-full h-fit flex justify-start items-center gap-2 -mt-2">
-          <button className="w-fit h-fit flex justify-center items-center gap-2 border-2 border-[#EBEBEC] px-4 py-2.5 rounded-full cursor-pointer">
-            <span className="inter_med text-[14px] text-[#4D4D4D]">
-              Miami, FL
-            </span>
-          </button>
-
-          <button className="w-fit h-fit flex justify-center items-center gap-2 bg-[#EBEBEC] border-2 border-[#EBEBEC] px-4 py-2.5 rounded-full cursor-pointer">
-            <span className="inter_med text-[14px] text-[#4D4D4D]">
-              Florida
-            </span>
-          </button>
+          {locations &&
+            locations.length > 0 &&
+            locations.map((location, index) => (
+              <button
+                key={index}
+                onClick={() => handleSetActiveLocation(index)}
+                className={`w-fit h-fit flex justify-center items-center gap-2 border-2 border-[#EBEBEC] px-4 py-2.5 rounded-full cursor-pointer ${
+                  activeLocation === index ? "bg-[#EBEBEC]" : ""
+                }`}
+              >
+                <span className="inter_med text-[14px] text-[#4D4D4D]">
+                  {location.city}
+                </span>
+              </button>
+            ))}
         </div>
 
         {/* Location Card */}
@@ -163,22 +250,26 @@ function Locations() {
           <div className="w-full h-fit flex flex-col gap-3 p-4">
             {/* Location Toggles  */}
             <div className="w-full h-fit flex flex-col gap-2">
-              <ToggleButton
-                label={"Miami, FL"}
-                showHover={true}
-                showSlider={true}
-                showArrow={true}
-              />
-              <ToggleButton
-                label={"Florida"}
-                showHover={true}
-                showSlider={true}
-                showArrow={true}
-              />
+              {locations &&
+                locations.length > 0 &&
+                locations.map((location, index) => (
+                  <ToggleButton
+                    key={index}
+                    label={location.city || "City name"}
+                    showHover={true}
+                    showSlider={true}
+                    showArrow={true}
+                    isActive={activeLocation === index}
+                    onClick={() => handleSetActiveLocation(index)}
+                  />
+                ))}
             </div>
 
             {/* Add Location Button  */}
-            <button className="w-full h-fit flex justify-center items-center gap-2 border-2 border-[#4B21E2] rounded-[8px] px-4 py-3 cursor-pointer">
+            <button
+              onClick={handleAddLoaction}
+              className="w-full h-fit flex justify-center items-center gap-2 border-2 border-[#4B21E2] rounded-[8px] px-4 py-3 cursor-pointer"
+            >
               <span className="poppins_reg text-[#4B21E2] text-[15px]">
                 Add more
               </span>
@@ -194,9 +285,9 @@ function Locations() {
         <div className="w-full h-full px-4 overflow-y-auto pb-15 relative">
           <div className="w-full h-fit flex justify-between items-center gap-3">
             <h3 className="poppins_reg text-[#0D0D0D] text-[18px]">
-              Miami, FL
+              {loc.city || "City name"}
             </h3>
-            <SmButton title={"Save"} />
+            <SmButton onClick={handleSave} title={"Save"} />
           </div>
           <form className="w-full h-fit flex flex-col gap-4 mt-4">
             <div>
@@ -204,8 +295,20 @@ function Locations() {
                 Outlet name
               </label>
               <TextInput
-                name={"Outlet name"}
-                placeholder={"Miami, FL"}
+                name={"name"}
+                placeholder={"Enter Outlet name"}
+                value={location.name}
+                onChange={handleChange}
+                styles="text-[#201F33] placeholder:text-[#201F33]"
+              />
+            </div>
+            <div>
+              <label className="poppins_med text-[14px] text-black">City</label>
+              <TextInput
+                name={"city"}
+                placeholder={"Enter City"}
+                value={location.city}
+                onChange={handleChange}
                 styles="text-[#201F33] placeholder:text-[#201F33]"
               />
             </div>
@@ -214,8 +317,10 @@ function Locations() {
                 Location
               </label>
               <TextInput
-                name={"Location"}
-                placeholder={"Anywhere block - 0, Anycity, Miami, FL - Pin:69"}
+                name={"mapQuery"}
+                placeholder={"Enter location"}
+                value={location.mapQuery}
+                onChange={handleChange}
                 styles="text-[#201F33] placeholder:text-[#201F33]"
               />
             </div>
@@ -224,8 +329,10 @@ function Locations() {
                 Contact number
               </label>
               <TextInput
-                name={"Contact number"}
-                placeholder={"+91"}
+                name={"phone"}
+                placeholder={"Enter Mobile no"}
+                value={location.phone}
+                onChange={handleChange}
                 styles="text-[#201F33] placeholder:text-[#201F33]"
               />
             </div>
@@ -234,8 +341,10 @@ function Locations() {
                 E-mail
               </label>
               <TextInput
-                name={"E-mail"}
+                name={"email"}
                 placeholder={"Enter email here "}
+                value={location.email}
+                onChange={handleChange}
                 styles="text-[#201F33] placeholder:text-[#201F33]"
               />
             </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 // Icons
 import { Facebook, Instagram } from "lucide-react";
@@ -9,48 +9,44 @@ import SmButton from "../Common/SmButton";
 import BigBtn from "./Components/Common/BigBtn";
 import ToggleButton from "../Common/ToggleButton";
 
-const defaultFooterConfig = {
-  links: {
-    column1: [
-      { label: "Home", href: "/", enabled: true },
-      { label: "Catering", href: "/catering", enabled: true },
-      { label: "Gift Cards", href: "/gift-cards", enabled: true },
-    ],
-    column2: [
-      { label: "Menu", href: "/menu", enabled: true },
-      { label: "Careers", href: "/careers", enabled: true },
-      { label: "Press", href: "/press", enabled: true },
-    ],
-    column3: [
-      { label: "Sweepstakes", href: "/sweepstakes", enabled: true },
-      { label: "Meet Our Team", href: "/team", enabled: true },
-    ],
-  },
+const footerConfigs = {
+  links: [
+    { label: "Home", href: "/", enabled: true },
+    { label: "Catering", href: "/catering", enabled: true },
+    { label: "Gift Cards", href: "/gift-cards", enabled: true },
+    { label: "Menu", href: "/menu", enabled: true },
+    { label: "Careers", href: "/careers", enabled: true },
+    { label: "Sweepstakes", href: "/sweepstakes", enabled: true },
+    { label: "Press", href: "/press", enabled: true },
+    { label: "Meet Our Team", href: "/team", enabled: true },
+  ],
+
   legalLinks: [
-    { label: "Order Terms", href: "/order-terms" },
-    { label: "Terms of Use", href: "/terms" },
-    { label: "Privacy Policy", href: "/privacy" },
-    { label: "Accessibility Statement", href: "/accessibility" },
+    { label: "Order Terms" },
+    { label: "Terms of Use" },
+    { label: "Privacy Policy" },
+    { label: "Accessibility Statement" },
   ],
-  socialLinks: [
-    {
-      icon: "/Images/facebook-icon.svg",
-      href: "https://facebook.com",
-      alt: "Facebook",
-    },
-    {
-      icon: "/Images/instagram-icon.svg",
-      href: "https://instagram.com",
-      alt: "Instagram",
-    },
-  ],
-  madeWith: "Made with Muncho",
-  cta: { label: "Order Now", href: "/" },
 };
 
 function Footer() {
-  const footerConfig = defaultFooterConfig;
-  const { links, legalLinks, cta } = footerConfig;
+  const [footerData, setFooterData] = useState(footerConfigs);
+  const { links, legalLinks } = footerData;
+
+  const handleLinksToggling = (index) => {
+    const linksCopy = [...links];
+    linksCopy[index] = {
+      ...linksCopy[index],
+      enabled: !linksCopy[index].enabled,
+    };
+
+    setFooterData((prev) => {
+      return {
+        ...prev,
+        links: linksCopy,
+      };
+    });
+  };
 
   return (
     <div className="w-full h-full min-h-fit flex flex-col justify-start items-center gap-10 overflow-hidden relative pb-20">
@@ -76,23 +72,19 @@ function Footer() {
             </div>
 
             {/* Page Links */}
-            <div className="w-fit h-fit grid grid-cols-3 gap-16">
-              {Object.values(links).map((column, i) => (
-                <div key={i} className="flex flex-col gap-3">
-                  {column
-                    .filter((link) => link.enabled)
-                    .map((link, index) => (
-                      <span
-                        key={index}
-                        className="inter_reg text-[13px] text-[#0D0D0D]"
-                      >
-                        {link.label}
-                      </span>
-                    ))}
-                </div>
-              ))}
+            <div className="w-fit h-fit grid grid-cols-3 gap-x-16 gap-y-4">
+              {links
+                .filter(({ enabled }, _) => enabled)
+                .map(({ label }, index) => (
+                  <span
+                    key={index}
+                    className="inter_reg text-[13px] text-[#0D0D0D]"
+                  >
+                    {label}
+                  </span>
+                ))}
             </div>
-            <BigBtn title={cta.label} link={cta.href} />
+            <BigBtn title={"Order Now"} />
           </div>
 
           <div className="w-full h-fit flex flex-col justify-center items-end gap-6 mt-8">
@@ -101,9 +93,12 @@ function Footer() {
 
             {/* Legal Links */}
             <div className="w-[78%] h-fit flex justify-start gap-8 text-gray-600 text-xs md:text-sm mb-4">
-              {legalLinks.map((link, i) => (
-                <span key={i} className="inter_reg text-[10px] text-[#4D4D4D]">
-                  {link.label}
+              {legalLinks.map(({ label }, index) => (
+                <span
+                  key={index}
+                  className="inter_reg text-[10px] text-[#4D4D4D]"
+                >
+                  {label}
                 </span>
               ))}
             </div>
@@ -138,14 +133,14 @@ function Footer() {
 
         {/* Link Toggles  */}
         <div className="w-full h-fit grid grid-cols-3 gap-2">
-          <ToggleButton label={"Home"} />
-          <ToggleButton label={"Catering"} />
-          <ToggleButton label={"Gift Cards"} />
-          <ToggleButton label={"Menu"} />
-          <ToggleButton label={"Careers"} />
-          <ToggleButton label={"Press"} />
-          <ToggleButton label={"Sweepstakes"} />
-          <ToggleButton label={"Meet our Team"} />
+          {links.map(({ label, enabled }, index) => (
+            <ToggleButton
+              key={index}
+              label={label}
+              isEnabled={enabled}
+              onToggle={() => handleLinksToggling(index)}
+            />
+          ))}
         </div>
       </div>
     </div>
