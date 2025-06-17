@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import TabHeading from "../Common/TabHeading";
+import { fetchLocations, postLocation } from "../../api";
 
 // Icons
 import { Plus, ChevronRight, ChevronLeft } from "lucide-react";
@@ -9,27 +10,9 @@ import TextInput from "../Common/TextInput";
 import SmButton from "../Common/SmButton";
 import ToggleButton from "../Common/ToggleButton";
 
-const demoLocations = [
-  {
-    name: "Talkin' Tacos",
-    city: "Miami, FL",
-    phone: "(305) 602-4816",
-    email: "info@talkintacos.net",
-    mapQuery: "97 SW 8th St, Miami, FL 33130",
-  },
-  {
-    name: "Another Location",
-    city: "Florida",
-    phone: "(123) 456-7890",
-    email: "contact@anotherlocation.com",
-    mapQuery: "456 Ocean Dr, Florida",
-  },
-];
-
 function Locations() {
-  const [locations, setLocations] = useState(demoLocations);
+  const [locations, setLocations] = useState([]);
   const [activeLocation, setactiveLocation] = useState(0);
-
   const [location, setLocation] = useState({
     name: "",
     city: "",
@@ -38,8 +21,24 @@ function Locations() {
     email: "",
     mapQuery: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
 
-  const loc = locations[activeLocation];
+  useEffect(() => {
+    const getLocations = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchLocations();
+        if (Array.isArray(data)) setLocations(data);
+      } catch (err) {
+        setError("Failed to fetch locations");
+      } finally {
+        setLoading(false);
+      }
+    };
+    getLocations();
+  }, []);
 
   const handleSetActiveLocation = (index) => {
     setactiveLocation(index);
@@ -82,11 +81,19 @@ function Locations() {
   };
 
   // Saves the updated data of a location object
-  const handleSave = () => {
-    const locationsCopy = [...locations];
-    locationsCopy[activeLocation] = location;
-
-    setLocations(locationsCopy); // Updates the locations Array
+  const handleSave = async () => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      await postLocation(location);
+      setSuccess(true);
+    } catch (err) {
+      setError("Failed to save location");
+    } finally {
+      setLoading(false);
+      setTimeout(() => setSuccess(false), 2000);
+    }
   };
 
   const resetLocation = () => {
@@ -98,6 +105,8 @@ function Locations() {
       mapQuery: "",
     });
   };
+
+  const loc = locations[activeLocation];
 
   return (
     <div className="w-full h-full min-h-fit flex flex-col justify-between items-center gap-10 overflow-hidden relative">

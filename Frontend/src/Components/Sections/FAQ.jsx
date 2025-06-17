@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { fetchFAQ, postFAQ } from "../../api";
 
 // Components
 import TabHeading from "../Common/TabHeading";
@@ -6,20 +7,6 @@ import SmButton from "../Common/SmButton";
 
 // Icons
 import { ChevronsUpDown, Pencil, ChevronDown } from "lucide-react";
-
-// Demo FAQs
-const demoFaqs = [
-  {
-    question: "What are your opening hours?",
-    answer:
-      "We are open daily from 10:00 AM to 11:00 PM, including weekends and holidays.",
-  },
-  {
-    question: "Do you offer home delivery?",
-    answer:
-      "Yes, we offer home delivery within a 5 km radius. You can place an order through our website or call us directly.",
-  },
-];
 
 // FAQ Card Component
 const FaqCard = ({
@@ -101,10 +88,28 @@ const FaqCard = ({
 
 // Main FAQ Component
 function Faq() {
-  const [faqs, setFaqs] = useState(demoFaqs);
+  const [faqs, setFaqs] = useState([]);
   const [activeFaq, setActiveFaq] = useState(null);
   const [activeEditFaq, setActiveEditFaq] = useState(null);
   const [faqData, setFaqData] = useState({ question: "", answer: "" });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    const getFAQ = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchFAQ();
+        if (data && data.questions) setFaqs(data.questions);
+      } catch (err) {
+        setError("Failed to fetch FAQ data");
+      } finally {
+        setLoading(false);
+      }
+    };
+    getFAQ();
+  }, []);
 
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
@@ -119,12 +124,21 @@ function Faq() {
     setFaqs((prev) => [...prev, { question: "", answer: "" }]);
   };
 
-  const handleUpdateFaq = (index) => {
-    const updatedFaqs = [...faqs];
-    updatedFaqs[index] = faqData;
-    setFaqs(updatedFaqs);
-    resetFaqData();
-    setActiveEditFaq(null);
+  const handleUpdateFaq = async (index) => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      await postFAQ({ heading: "FAQ", questions: faqs });
+      setSuccess(true);
+    } catch (err) {
+      setError("Failed to save FAQ data");
+    } finally {
+      setLoading(false);
+      setTimeout(() => setSuccess(false), 2000);
+      resetFaqData();
+      setActiveEditFaq(null);
+    }
   };
 
   const resetFaqData = () => {
@@ -164,6 +178,13 @@ function Faq() {
 
         <SmButton title={"Add FAQs"} onClick={handleAddFaq} />
       </div>
+
+      {/* Loading, Error, Success States */}
+      {loading && <p className="text-center">Loading...</p>}
+      {error && <p className="text-red-500 text-center">{error}</p>}
+      {success && (
+        <p className="text-green-500 text-center">Saved successfully!</p>
+      )}
     </div>
   );
 }

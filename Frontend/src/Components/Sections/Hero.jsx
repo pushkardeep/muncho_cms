@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { fetchHero, postHero } from "../../api";
 
 // components
 import BigBtn from "./Components/Common/BigBtn";
@@ -21,6 +22,27 @@ function Hero() {
       },
     },
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  useEffect(() => {
+    const getHero = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchHero();
+        console.log("Hero Data:", data);
+        if (data) {
+          setHeroSectionData((prev) => ({ ...prev, data: data }));
+        }
+      } catch (err) {
+        setError("Failed to fetch hero data");
+      } finally {
+        setLoading(false);
+      }
+    };
+    getHero();
+  }, []);
 
   const handleTextInputChange = (e) => {
     const { type, name, value } = e.target;
@@ -32,6 +54,21 @@ function Hero() {
         };
       }
     });
+  };
+
+  const handleSave = async () => {
+    setLoading(true);
+    setError(null);
+    setSuccess(false);
+    try {
+      await postHero(heroSectionData.data);
+      setSuccess(true);
+    } catch (err) {
+      setError("Failed to save hero data");
+    } finally {
+      setLoading(false);
+      setTimeout(() => setSuccess(false), 2000);
+    }
   };
 
   return (
@@ -48,8 +85,8 @@ function Hero() {
         <div className="w-full h-full rounded-[32px] overflow-hidden relative">
           <img
             className="absolute top-0 left-0 object-cover overflow-hidden z-0"
-            src="/Images/Demo/hero.jpeg"
-            alt="hero_image"
+            src={heroSectionData.data.bg_image.src || "/Images/Demo/hero.jpeg"}
+            alt={heroSectionData.data.bg_image.alt || "hero_image"}
           />
 
           {/* Overlay  */}
@@ -77,9 +114,13 @@ function Hero() {
       <div className="w-full h-fit flex flex-col justify-center items-start gap-3 overflow-hidden relative">
         <div className="w-full h-fit flex justify-between items-center gap-3">
           <h3 className="poppins_med text-[#201F33] text-[14px]">Edit</h3>
-          <SmButton title={"Save"} />
+          <SmButton
+            title={loading ? "Saving..." : success ? "Saved!" : "Save"}
+            onClick={handleSave}
+            disabled={loading}
+          />
         </div>
-
+        {error && <div className="text-red-500 text-sm">{error}</div>}
         {/* Inputs  */}
         <div className="w-full h-fit flex justify-between items-center gap-3">
           {/* Text Inputs */}
