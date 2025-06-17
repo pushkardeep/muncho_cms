@@ -29,11 +29,11 @@ function SectionMenu({ setIsSectionMenuOpen }) {
 
   // Function to handle adding a section on click
   // It dispatches the addSection action with the section data
-  const handleSection = (name, section) => {
+  const handleSection = (name, sectionKey) => {
     const data = {
       name: name,
       isLocked: false,
-      section: section,
+      section: sectionKey, // store as string
     };
     dispatch(addSection(data)); // Dispatch the action to add the section
     setIsSectionMenuOpen((prev) => !prev); // Toggle the section menu visibility
@@ -43,7 +43,7 @@ function SectionMenu({ setIsSectionMenuOpen }) {
       <SectionMenuOption
         Icon={Images}
         label={"Gallery"}
-        onClick={() => handleSection("Gallery Section", Gallery)}
+        onClick={() => handleSection("Gallery Section", "Gallery")}
       />
       <SectionMenuOption Icon={SquareChartGantt} label={"Features"} />
       <SectionMenuOption Icon={Book} label={"Menu"} />
@@ -51,12 +51,12 @@ function SectionMenu({ setIsSectionMenuOpen }) {
       <SectionMenuOption
         Icon={MessagesSquare}
         label={"Faqs"}
-        onClick={() => handleSection("FAQs Section", Faq)}
+        onClick={() => handleSection("FAQs Section", "Faq")}
       />
       <SectionMenuOption
         Icon={MapPinned}
         label={"Locations"}
-        onClick={() => handleSection("Locations Section", Locations)}
+        onClick={() => handleSection("Locations Section", "Locations")}
       />
     </div>
   );

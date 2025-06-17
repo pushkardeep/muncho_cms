@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // Icons
 import { ChevronDown, Plus } from "lucide-react";
@@ -6,115 +6,113 @@ import { ChevronDown, Plus } from "lucide-react";
 // Components
 import BigBtn from "./Components/Common/BigBtn";
 import Menu from "./Components/Menu";
-import LinkEditor from "../LinkEditor";
+import ToggleButton from "../Common/ToggleButton";
 import TabHeading from "../Common/TabHeading";
 import SmButton from "../Common/SmButton";
 
-// Initial Link Data
-const initialNavData = {
-  displayedLinks: [
-    { title: "Home", link: "https://google.com" },
-    { title: "Menu", link: "https://google.com" },
-    { title: "SweepStake", link: "https://google.com" },
-  ],
-  menuLinks: [
-    { title: "Home", link: "https://google.com" },
-    { title: "Menu", link: "https://google.com" },
-    { title: "Story", link: "https://google.com" },
-    { title: "Catering", link: "https://google.com" },
-    { title: "Careers", link: "https://google.com" },
-    { title: "Meet our team", link: "https://google.com" },
-    { title: "Gift Cards", link: "https://google.com" },
-    { title: "Press", link: "https://google.com" },
-  ],
-};
+// API
+import { fetchNav, updateNav, postNav } from "../../api";
 
 function Nav() {
   // State
-  const [navData, setNavData] = useState(initialNavData);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeEditor, setActiveEditor] = useState({ type: null, index: null });
-  const [linkInput, setLinkInput] = useState({ title: "", link: "" });
+  const [navData, setNavData] = useState(null);
+  const [navId, setNavId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editInput, setEditInput] = useState({ title: "", link: "" });
 
-  const { displayedLinks, menuLinks } = navData;
+  useEffect(() => {
+    const getNav = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchNav();
+        if (data) {
+          setNavData(data);
+          setNavId(data._id);
+        } else {
+          setNavData({ links: [] });
+        }
+      } catch (err) {
+        setNavData({ links: [] });
+      } finally {
+        setLoading(false);
+      }
+    };
+    getNav();
+  }, []);
 
-  // Handlers
-  const handleToggleEditor = (type, index) => {
-    setActiveEditor((prev) =>
-      prev.type === type && prev.index === index
-        ? { type: null, index: null }
-        : { type, index }
+  if (loading) return <div>Loading...</div>;
+  if (!navData)
+    return (
+      <div style={{ color: "red" }}>
+        Navigation data missing or error occurred.
+      </div>
     );
 
-    const currentLink = (type === "displayed" ? displayedLinks : menuLinks)[
-      index
-    ];
-    setLinkInput(currentLink || { title: "", link: "" });
+  const links = Array.isArray(navData.links) ? navData.links : [];
+
+  // Handlers
+  const handleLinksToggling = (index) => {
+    const linksCopy = [...links];
+    linksCopy[index] = {
+      ...linksCopy[index],
+      enabled: !linksCopy[index].enabled,
+    };
+    setNavData((prev) => ({ ...prev, links: linksCopy }));
   };
 
-  const handleInputChange = (e) => {
+  const handleAddLink = () => {
+    setNavData((prev) => ({
+      ...prev,
+      links: [
+        ...prev.links,
+        {
+          title: `Link ${prev.links.length + 1}`,
+          link: "https://example.com",
+          enabled: true,
+        },
+      ],
+    }));
+  };
+
+  const handleEditClick = (index) => {
+    setEditingIndex(index);
+    setEditInput({ title: links[index].title, link: links[index].link });
+  };
+
+  const handleEditInputChange = (e) => {
     const { name, value } = e.target;
-    setLinkInput((prev) => ({ ...prev, [name]: value }));
+    setEditInput((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSaveLink = () => {
-    const { type, index } = activeEditor;
-
-    if (!type || index === null) return;
-
-    setNavData((prevNavData) => {
-      const isDisplayed = type === "displayed";
-      const key = isDisplayed ? "displayedLinks" : "menuLinks";
-
-      // Copy the existing links array
-      const updatedLinks = [...prevNavData[key]];
-
-      // Update the specific link
-      updatedLinks[index] = { ...linkInput };
-
-      // Return updated navData
-      return {
-        ...prevNavData,
-        [key]: updatedLinks,
-      };
-    });
-
-    // Clear the active editor state
-    setActiveEditor({ type: null, index: null });
+  const handleEditSave = (index) => {
+    const linksCopy = [...links];
+    linksCopy[index] = {
+      ...linksCopy[index],
+      title: editInput.title,
+      link: editInput.link,
+    };
+    setNavData((prev) => ({ ...prev, links: linksCopy }));
+    setEditingIndex(null);
   };
 
-  const handleAddMenuLink = () => {
-    const newLinkData = { title: "Link", link: "https://example.com" };
-
-    handleToggleEditor("menu", menuLinks.length);
-    setLinkInput({ ...newLinkData });
-
-    setNavData((prevNavData) => {
-      return {
-        ...prevNavData,
-        menuLinks: [...prevNavData.menuLinks, { ...newLinkData }],
-      };
-    });
+  const handleEditCancel = () => {
+    setEditingIndex(null);
   };
 
-  const handleDeleteMenuLink = () => {
-    const { type, index } = activeEditor;
-
-    if (type !== "menu" || index === null) return;
-
-    setNavData((prevNavData) => {
-      const menuLinks = prevNavData.menuLinks.filter((_, i) => index !== i);
-      return {
-        ...prevNavData,
-        menuLinks,
-      };
-    });
-
-    // Clear the active editor state
-    setActiveEditor({ type: null, index: null });
+  const handleSaveNav = async () => {
+    try {
+      if (navId) {
+        await updateNav(navId, navData);
+      } else {
+        const created = await postNav(navData);
+        setNavId(created._id);
+      }
+      // Optionally show a success message
+    } catch (err) {
+      // Optionally show an error message
+    }
   };
-
-  const handleToggleMenu = () => setIsMenuOpen((prev) => !prev);
 
   return (
     <div className="w-full h-full min-h-fit flex flex-col items-center gap-10">
@@ -134,22 +132,25 @@ function Nav() {
             className="h-[50px] object-cover"
           />
 
-          {displayedLinks.map(({ title }, index) => (
-            <span
-              key={index}
-              className={`inter_reg text-[0.8rem] ${
-                title === "Home"
-                  ? "text-black bg-[#EBEBEC] rounded-[0.5rem] px-2 py-1.5"
-                  : "text-[#4D4D4D]"
-              }`}
-            >
-              {title}
-            </span>
-          ))}
+          {links
+            .filter((l) => l.enabled)
+            .map(({ title }, index) => (
+              <span
+                key={index}
+                className={`inter_reg text-[0.8rem] ${
+                  title === "Home"
+                    ? "text-black bg-[#EBEBEC] rounded-[0.5rem] px-2 py-1.5"
+                    : "text-[#4D4D4D]"
+                }`}
+              >
+                {title}
+              </span>
+            ))}
 
           <button
-            onClick={handleToggleMenu}
             className="flex items-center gap-1 cursor-pointer"
+            style={{ pointerEvents: "none", opacity: 0.5 }}
+            disabled
           >
             <span className="text-[#4D4D4D] inter_reg text-[0.8rem]">More</span>
             <ChevronDown size={15} color="#4D4D4D" />
@@ -165,73 +166,73 @@ function Nav() {
           </div>
           <BigBtn title="Order Online" />
         </div>
-
-        {/* More Menu Dropdown */}
-        {isMenuOpen && <Menu links={menuLinks} active="Home" />}
       </nav>
 
-      {/* Link Editing Section */}
-      <div className="w-full flex flex-col gap-6 mt-10">
-        <h3 className="poppins_med text-[#201F33] text-[14px]">Edit</h3>
-
-        {/* Displayed Links Editor */}
-        <div className="w-[700px] flex flex-col gap-3">
-          <h3 className="poppins_med text-[#5C5C7A] text-[14px]">
-            Displayed Links
-          </h3>
-          <div className="grid grid-cols-4 gap-x-5 gap-y-3">
-            {displayedLinks.map(({ title }, index) => (
-              <LinkEditor
-                key={index}
-                title={title}
-                lableValue={linkInput.title}
-                linkValue={linkInput.link}
-                onLableChange={handleInputChange}
-                onLinkChange={handleInputChange}
-                onClick={() => handleToggleEditor("displayed", index)}
-                onSave={handleSaveLink}
-                isActive={
-                  activeEditor.type === "displayed" &&
-                  activeEditor.index === index
-                }
-              />
-            ))}
-          </div>
+      {/* Editing Section */}
+      <div className="w-full h-fit flex flex-col justify-center items-start gap-3 overflow-hidden relative mt-10">
+        <div className="w-full h-fit flex justify-between items-center gap-3">
+          <h3 className="poppins_med text-[#201F33] text-[14px]">Edit</h3>
+          <SmButton title={"Save"} onClick={handleSaveNav} />
         </div>
-
-        {/* Menu Links Editor */}
-        <div className="w-[700px] flex flex-col gap-3">
-          <h3 className="poppins_med text-[#5C5C7A] text-[14px]">More Links</h3>
-          <div className="grid grid-cols-4 gap-x-5 gap-y-3">
-            {menuLinks.map(({ title }, index) => (
-              <LinkEditor
-                key={index}
-                title={title}
-                enableDelete={true}
-                lableValue={linkInput.title}
-                linkValue={linkInput.link}
-                onLableChange={handleInputChange}
-                onLinkChange={handleInputChange}
-                onClick={() => handleToggleEditor("menu", index)}
-                onSave={handleSaveLink}
-                onDelete={handleDeleteMenuLink}
-                isActive={
-                  activeEditor.type === "menu" && activeEditor.index === index
-                }
+        {/* Link Toggles  */}
+        <div className="w-full h-fit grid grid-cols-3 gap-2">
+          {links.map(({ title, enabled, link }, index) => (
+            <div key={index} className="flex flex-col gap-1">
+              {editingIndex === index ? (
+                <div className="flex flex-col gap-1 bg-[#F5F5F7] p-2 rounded">
+                  <input
+                    className="border rounded px-2 py-1 text-sm mb-1"
+                    name="title"
+                    value={editInput.title}
+                    onChange={handleEditInputChange}
+                    placeholder="Name"
+                  />
+                  <input
+                    className="border rounded px-2 py-1 text-sm mb-1"
+                    name="link"
+                    value={editInput.link}
+                    onChange={handleEditInputChange}
+                    placeholder="Link (optional)"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      className="bg-[#6C63FF] text-white rounded px-2 py-1 text-xs"
+                      onClick={() => handleEditSave(index)}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className="bg-gray-200 text-black rounded px-2 py-1 text-xs"
+                      onClick={handleEditCancel}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <span
+                  className="cursor-pointer poppins_reg text-black text-[14px]"
+                  onClick={() => handleEditClick(index)}
+                  title={link}
+                >
+                  {title}
+                </span>
+              )}
+              <ToggleButton
+                label="Enabled"
+                isEnabled={enabled}
+                onToggle={() => handleLinksToggling(index)}
               />
-            ))}
-
-            {/* Add Link Button */}
-            <button
-              onClick={handleAddMenuLink}
-              className="w-fit flex items-center gap-2 p-2 rounded-[8px] hover:bg-[#EEEBFA] cursor-pointer"
-            >
-              <Plus color="black" size={17} />
-              <span className="poppins_reg text-black text-[14px]">Add</span>
-            </button>
-          </div>
-
-          <SmButton title="Save" styles="mt-2.5" />
+            </div>
+          ))}
+          {/* Add Link Button */}
+          <button
+            onClick={handleAddLink}
+            className="w-fit flex items-center gap-2 p-2 rounded-[8px] hover:bg-[#EEEBFA] cursor-pointer border border-[#D6D6D6] self-end"
+          >
+            <Plus color="black" size={17} />
+            <span className="poppins_reg text-black text-[14px]">Add</span>
+          </button>
         </div>
       </div>
     </div>

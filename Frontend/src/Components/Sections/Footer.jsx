@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // Icons
 import { Facebook, Instagram } from "lucide-react";
@@ -9,43 +9,181 @@ import SmButton from "../Common/SmButton";
 import BigBtn from "./Components/Common/BigBtn";
 import ToggleButton from "../Common/ToggleButton";
 
-const footerConfigs = {
-  links: [
-    { label: "Home", href: "/", enabled: true },
-    { label: "Catering", href: "/catering", enabled: true },
-    { label: "Gift Cards", href: "/gift-cards", enabled: true },
-    { label: "Menu", href: "/menu", enabled: true },
-    { label: "Careers", href: "/careers", enabled: true },
-    { label: "Sweepstakes", href: "/sweepstakes", enabled: true },
-    { label: "Press", href: "/press", enabled: true },
-    { label: "Meet Our Team", href: "/team", enabled: true },
-  ],
-
-  legalLinks: [
-    { label: "Order Terms" },
-    { label: "Terms of Use" },
-    { label: "Privacy Policy" },
-    { label: "Accessibility Statement" },
-  ],
-};
+// API
+import { fetchFooter, updateFooter, postFooter } from "../../api";
 
 function Footer() {
-  const [footerData, setFooterData] = useState(footerConfigs);
-  const { links, legalLinks } = footerData;
+  const [footerData, setFooterData] = useState(null);
+  const [footerId, setFooterId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [editingIndex, setEditingIndex] = useState(null);
+  const [editInput, setEditInput] = useState({ label: "", href: "" });
+  const [editingLegalIndex, setEditingLegalIndex] = useState(null);
+  const [editLegalInput, setEditLegalInput] = useState({ label: "", href: "" });
 
+  useEffect(() => {
+    const getFooter = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchFooter();
+        console.log("Fetched footer data:", data); // Debug log
+        if (data) {
+          setFooterData(data);
+          setFooterId(data._id);
+        } else {
+          setFooterData({ links: [], legalLinks: [] });
+        }
+      } catch (err) {
+        console.error("Error fetching footer:", err); // Debug log
+        setFooterData({ links: [], legalLinks: [] });
+      } finally {
+        setLoading(false);
+      }
+    };
+    getFooter();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (!footerData)
+    return (
+      <div style={{ color: "red" }}>Footer data missing or error occurred.</div>
+    );
+
+  // Ensure links and legalLinks are always arrays
+  const links = Array.isArray(footerData.links) ? footerData.links : [];
+  const legalLinks = Array.isArray(footerData.legalLinks)
+    ? footerData.legalLinks
+    : [];
+
+  // Restore handleSaveFooter function
+  const handleSaveFooter = async () => {
+    try {
+      if (footerId) {
+        await updateFooter(footerId, footerData);
+      } else {
+        const created = await postFooter(footerData);
+        setFooterId(created._id);
+      }
+      // Optionally show a success message
+    } catch (err) {
+      // Optionally show an error message
+    }
+  };
+
+  // Restore handleAddLink and handleAddLegalLink functions
+  const handleAddLink = () => {
+    setFooterData((prev) => ({
+      ...prev,
+      links: [
+        ...(Array.isArray(prev.links) ? prev.links : []),
+        {
+          label: `Link ${(prev.links?.length || 0) + 1}`,
+          href: "#",
+          enabled: true,
+        },
+      ],
+    }));
+  };
+
+  const handleAddLegalLink = () => {
+    setFooterData((prev) => ({
+      ...prev,
+      legalLinks: [
+        ...(Array.isArray(prev.legalLinks) ? prev.legalLinks : []),
+        {
+          label: `Legal Link ${(prev.legalLinks?.length || 0) + 1}`,
+          href: "#",
+          enabled: true,
+        },
+      ],
+    }));
+  };
+
+  // Restore handleLinksToggling
   const handleLinksToggling = (index) => {
     const linksCopy = [...links];
     linksCopy[index] = {
       ...linksCopy[index],
       enabled: !linksCopy[index].enabled,
     };
+    setFooterData((prev) => ({
+      ...prev,
+      links: linksCopy,
+    }));
+  };
 
-    setFooterData((prev) => {
-      return {
-        ...prev,
-        links: linksCopy,
-      };
+  // Restore handleEditClick
+  const handleEditClick = (index) => {
+    setEditingIndex(index);
+    setEditInput({ label: links[index].label, href: links[index].href || "" });
+  };
+
+  // Restore handleEditInputChange
+  const handleEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditInput((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Restore handleEditSave
+  const handleEditSave = (index) => {
+    const linksCopy = [...links];
+    linksCopy[index] = {
+      ...linksCopy[index],
+      label: editInput.label,
+      href: editInput.href,
+    };
+    setFooterData((prev) => ({ ...prev, links: linksCopy }));
+    setEditingIndex(null);
+  };
+
+  // Restore handleEditCancel
+  const handleEditCancel = () => {
+    setEditingIndex(null);
+  };
+
+  // Restore handleLegalLinksToggling
+  const handleLegalLinksToggling = (index) => {
+    const legalLinksCopy = [...legalLinks];
+    legalLinksCopy[index] = {
+      ...legalLinksCopy[index],
+      enabled: !legalLinksCopy[index].enabled,
+    };
+    setFooterData((prev) => ({
+      ...prev,
+      legalLinks: legalLinksCopy,
+    }));
+  };
+
+  // Restore handleLegalEditClick
+  const handleLegalEditClick = (index) => {
+    setEditingLegalIndex(index);
+    setEditLegalInput({
+      label: legalLinks[index].label,
+      href: legalLinks[index].href || "",
     });
+  };
+
+  // Restore handleLegalEditInputChange
+  const handleLegalEditInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditLegalInput((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Restore handleLegalEditSave
+  const handleLegalEditSave = (index) => {
+    const legalLinksCopy = [...legalLinks];
+    legalLinksCopy[index] = {
+      ...legalLinksCopy[index],
+      label: editLegalInput.label,
+      href: editLegalInput.href,
+    };
+    setFooterData((prev) => ({ ...prev, legalLinks: legalLinksCopy }));
+    setEditingLegalIndex(null);
+  };
+
+  // Restore handleLegalEditCancel
+  const handleLegalEditCancel = () => {
+    setEditingLegalIndex(null);
   };
 
   return (
@@ -93,14 +231,16 @@ function Footer() {
 
             {/* Legal Links */}
             <div className="w-[78%] h-fit flex justify-start gap-8 text-gray-600 text-xs md:text-sm mb-4">
-              {legalLinks.map(({ label }, index) => (
-                <span
-                  key={index}
-                  className="inter_reg text-[10px] text-[#4D4D4D]"
-                >
-                  {label}
-                </span>
-              ))}
+              {legalLinks
+                .filter(({ enabled }) => enabled)
+                .map(({ label }, index) => (
+                  <span
+                    key={index}
+                    className="inter_reg text-[10px] text-[#4D4D4D]"
+                  >
+                    {label}
+                  </span>
+                ))}
             </div>
           </div>
         </div>
@@ -128,19 +268,132 @@ function Footer() {
       <div className="w-full h-fit flex flex-col justify-center items-start gap-3 overflow-hidden relative">
         <div className="w-full h-fit flex justify-between items-center gap-3">
           <h3 className="poppins_med text-[#201F33] text-[14px]">Edit</h3>
-          <SmButton title={"Save"} />
+          <SmButton title={"Save"} onClick={handleSaveFooter} />
         </div>
 
         {/* Link Toggles  */}
         <div className="w-full h-fit grid grid-cols-3 gap-2">
-          {links.map(({ label, enabled }, index) => (
-            <ToggleButton
-              key={index}
-              label={label}
-              isEnabled={enabled}
-              onToggle={() => handleLinksToggling(index)}
-            />
+          {links.map(({ label, enabled, href }, index) => (
+            <div key={index} className="flex flex-col gap-1">
+              {editingIndex === index ? (
+                <div className="flex flex-col gap-1 bg-[#F5F5F7] p-2 rounded">
+                  <input
+                    className="border rounded px-2 py-1 text-sm mb-1"
+                    name="label"
+                    value={editInput.label}
+                    onChange={handleEditInputChange}
+                    placeholder="Name"
+                  />
+                  <input
+                    className="border rounded px-2 py-1 text-sm mb-1"
+                    name="href"
+                    value={editInput.href}
+                    onChange={handleEditInputChange}
+                    placeholder="Link (optional)"
+                  />
+                  <div className="flex gap-2">
+                    <button
+                      className="bg-[#6C63FF] text-white rounded px-2 py-1 text-xs"
+                      onClick={() => handleEditSave(index)}
+                    >
+                      Save
+                    </button>
+                    <button
+                      className="bg-gray-200 text-black rounded px-2 py-1 text-xs"
+                      onClick={handleEditCancel}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <span
+                  className="cursor-pointer poppins_reg text-black text-[14px]"
+                  onClick={() => handleEditClick(index)}
+                  title={href}
+                >
+                  {label}
+                </span>
+              )}
+              <ToggleButton
+                label="Enabled"
+                isEnabled={enabled}
+                onToggle={() => handleLinksToggling(index)}
+              />
+            </div>
           ))}
+          {/* Add Link Button */}
+          <button
+            onClick={handleAddLink}
+            className="w-fit flex items-center gap-2 p-2 rounded-[8px] hover:bg-[#EEEBFA] cursor-pointer border border-[#D6D6D6] self-end"
+          >
+            <span className="poppins_reg text-black text-[14px]">Add</span>
+          </button>
+        </div>
+
+        {/* Legal Links */}
+        <div className="w-full h-fit flex flex-col justify-center items-start gap-3 overflow-hidden relative mt-6">
+          <h3 className="poppins_med text-[#201F33] text-[14px]">
+            Legal Links
+          </h3>
+          <div className="w-full h-fit grid grid-cols-3 gap-2">
+            {legalLinks.map(({ label, enabled, href }, index) => (
+              <div key={index} className="flex flex-col gap-1">
+                {editingLegalIndex === index ? (
+                  <div className="flex flex-col gap-1 bg-[#F5F5F7] p-2 rounded">
+                    <input
+                      className="border rounded px-2 py-1 text-sm mb-1"
+                      name="label"
+                      value={editLegalInput.label}
+                      onChange={handleLegalEditInputChange}
+                      placeholder="Name"
+                    />
+                    <input
+                      className="border rounded px-2 py-1 text-sm mb-1"
+                      name="href"
+                      value={editLegalInput.href}
+                      onChange={handleLegalEditInputChange}
+                      placeholder="Link (optional)"
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        className="bg-[#6C63FF] text-white rounded px-2 py-1 text-xs"
+                        onClick={() => handleLegalEditSave(index)}
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="bg-gray-200 text-black rounded px-2 py-1 text-xs"
+                        onClick={handleLegalEditCancel}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <span
+                    className="cursor-pointer poppins_reg text-black text-[14px]"
+                    onClick={() => handleLegalEditClick(index)}
+                    title={href}
+                  >
+                    {label}
+                  </span>
+                )}
+                <ToggleButton
+                  label="Enabled"
+                  isEnabled={enabled}
+                  onToggle={() => handleLegalLinksToggling(index)}
+                />
+              </div>
+            ))}
+            {/* Add Legal Link Button */}
+            <button
+              onClick={handleAddLegalLink}
+              className="w-fit flex items-center gap-2 p-2 rounded-[8px] hover:bg-[#EEEBFA] cursor-pointer border border-[#D6D6D6] self-end"
+            >
+              <span className="poppins_reg text-black text-[14px]">Add</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

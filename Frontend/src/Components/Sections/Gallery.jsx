@@ -51,6 +51,19 @@ function Gallery() {
     }
   };
 
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setGalleryData((prev) => ({
+        ...prev,
+        images: [...(prev.images || []), reader.result],
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
   return (
     <div className="w-full h-full min-h-fit flex flex-col justify-start items-center gap-10 overflow-hidden relative pb-20">
       {/* Headings  */}
@@ -68,16 +81,29 @@ function Gallery() {
         <div className="w-[500px] grid grid-cols-3 gap-2">
           {/* Render images if available */}
           {galleryData.images && galleryData.images.length > 0
-            ? galleryData.images.map((img, idx) => (
-                <img
-                  key={idx}
-                  src={img}
-                  alt={`gallery-img-${idx}`}
-                  className="bg-[#F8F7FA] aspect-square object-cover"
-                />
-              ))
+            ? [
+                ...galleryData.images.map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={img}
+                    alt={`gallery-img-${idx}`}
+                    className="bg-[#F8F7FA] aspect-square object-cover"
+                  />
+                )),
+                galleryData.images.length < 9 && (
+                  <ImgUploader
+                    key="uploader"
+                    styles="bg-[#F8F7FA] aspect-square"
+                    onChange={handleImageUpload}
+                  />
+                ),
+              ]
             : Array.from({ length: 9 }).map((_, idx) => (
-                <ImgUploader key={idx} styles="bg-[#F8F7FA] aspect-square" />
+                <ImgUploader
+                  key={idx}
+                  styles="bg-[#F8F7FA] aspect-square"
+                  onChange={handleImageUpload}
+                />
               ))}
         </div>
       </div>

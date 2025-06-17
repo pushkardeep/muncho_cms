@@ -1,5 +1,5 @@
 // Footer section model
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const FooterSchema = new mongoose.Schema({
   links: {
@@ -38,12 +38,7 @@ const FooterSchema = new mongoose.Schema({
       alt: { type: String, required: true },
     },
   ],
-  madeWith: { type: String, default: '' },
-  cta: {
-    label: { type: String, default: '' },
-    href: { type: String, default: '' },
-  },
-  createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Footer', FooterSchema);
+module.exports =
+  mongoose.models.Footer || mongoose.model("Footer", FooterSchema);

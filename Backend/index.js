@@ -9,7 +9,7 @@ const app = express();
 app.use(
   cors({
     origin: "http://localhost:5173", // frontend URL
-    credentials: true,               // needed if using cookies or HTTP auth
+    credentials: true, // needed if using cookies or HTTP auth
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -37,6 +37,7 @@ const galleryRoutes = require("./routes/gallery");
 const locationRoutes = require("./routes/location");
 const faqRoutes = require("./routes/faq");
 const footerRoutes = require("./routes/footer");
+const navfooterRouter = require("./routes/navfooter");
 
 app.use("/api/data", dataRoutes);
 app.use("/api/hero", heroRoutes);
@@ -44,6 +45,7 @@ app.use("/api/gallery", galleryRoutes);
 app.use("/api/location", locationRoutes);
 app.use("/api/faq", faqRoutes);
 app.use("/api/footer", footerRoutes);
+app.use("/api", navfooterRouter);
 
 // ✅ Start server
 const PORT = process.env.PORT || 5000;

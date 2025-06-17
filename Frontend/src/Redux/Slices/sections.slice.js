@@ -9,17 +9,17 @@ const sectionTabs = [
   {
     name: "Navigation Bar",
     isLocked: true,
-    section: Nav,
+    section: "Nav", // store as string
   },
   {
     name: "Hero Section",
     isLocked: true,
-    section: Hero,
+    section: "Hero",
   },
   {
     name: "Footer",
     isLocked: true,
-    section: Footer,
+    section: "Footer",
   },
 ];
 

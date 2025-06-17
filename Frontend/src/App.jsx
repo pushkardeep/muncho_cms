@@ -14,14 +14,30 @@ import {
 } from "lucide-react";
 
 // Components
-import Nav from "./Components/Sections/Nav"; // Default Section
+import Nav from "./Components/Sections/Nav";
+import Hero from "./Components/Sections/Hero";
+import Footer from "./Components/Sections/Footer";
+import Gallery from "./Components/Sections/Gallery";
+import Locations from "./Components/Sections/Locations";
+import Faq from "./Components/Sections/Faq";
 import SectionTab from "./Components/SectionTab";
 import SectionMenu from "./Components/SectionMenu";
 
+// Section component mapping
+const sectionComponentMap = {
+  Nav,
+  Hero,
+  Footer,
+  Gallery,
+  Locations,
+  Faq,
+};
+
 function App() {
+  // Set section as string 'Nav' instead of component
   const [currentSection, setCurrentSection] = useState({
     index: 0,
-    section: Nav,
+    section: "Nav",
   });
   const [isSectionMenuOpen, setIsSectionMenuOpen] = useState(false);
 
@@ -120,7 +136,7 @@ function App() {
                       title={name}
                       isActive={index === currentSection.index}
                       onClick={() => {
-                        setCurrentSection({ index, section });
+                        setCurrentSection({ index, section }); // section is string
                       }}
                     />
                   ))}
@@ -134,7 +150,10 @@ function App() {
 
             {/* Content Editing side  */}
             <div className="flex-1 h-[90vh] relative overflow-y-auto px-10">
-              <currentSection.section />
+              {sectionComponentMap[currentSection.section] &&
+                React.createElement(
+                  sectionComponentMap[currentSection.section]
+                )}
             </div>
           </div>
         </div>

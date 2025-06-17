@@ -16,10 +16,10 @@ const FaqCard = ({
   inEditMode = false,
   onClick,
   onClickEdit,
-  onQuestionInputChange,
-  onAnswerInputChange,
-  questionInputValue = "",
-  answerInputValue = "",
+  onTitleInputChange,
+  onDescriptionInputChange,
+  titleInputValue = "",
+  descriptionInputValue = "",
   onSaveFaq,
 }) => (
   <div
@@ -59,22 +59,22 @@ const FaqCard = ({
       <div>
         <div className="flex gap-8">
           <input
-            name="question"
+            name="title"
             type="text"
             placeholder="Question"
-            value={questionInputValue}
-            onChange={onQuestionInputChange}
+            value={titleInputValue}
+            onChange={onTitleInputChange}
             className="inter_reg w-full bg-white text-[14px] text-[#0D0D0D] placeholder:text-[#222222] border-2 border-black rounded-[8px] px-2 py-2 focus:outline-none"
           />
           <SmButton onClick={onSaveFaq} title={"Save"} />
         </div>
 
         <textarea
-          name="answer"
+          name="description"
           rows={4}
           placeholder="Answer"
-          value={answerInputValue}
-          onChange={onAnswerInputChange}
+          value={descriptionInputValue}
+          onChange={onDescriptionInputChange}
           className="inter_reg w-full mt-4 bg-white text-[14px] text-[#5C5C7A] placeholder:text-[#5C5C7A] border-2 border-black rounded-[8px] px-2 py-2 resize-none focus:outline-none"
         />
       </div>
@@ -91,7 +91,7 @@ function Faq() {
   const [faqs, setFaqs] = useState([]);
   const [activeFaq, setActiveFaq] = useState(null);
   const [activeEditFaq, setActiveEditFaq] = useState(null);
-  const [faqData, setFaqData] = useState({ question: "", answer: "" });
+  const [faqData, setFaqData] = useState({ title: "", description: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
@@ -114,6 +114,13 @@ function Faq() {
   const handleChangeInput = (e) => {
     const { name, value } = e.target;
     setFaqData((prev) => ({ ...prev, [name]: value }));
+    if (activeEditFaq !== null) {
+      setFaqs((prev) =>
+        prev.map((faq, idx) =>
+          idx === activeEditFaq ? { ...faq, [name]: value } : faq
+        )
+      );
+    }
   };
 
   const handleAddFaq = () => {
@@ -121,7 +128,7 @@ function Faq() {
     const newIndex = faqs.length;
     setActiveFaq(newIndex);
     setActiveEditFaq(newIndex);
-    setFaqs((prev) => [...prev, { question: "", answer: "" }]);
+    setFaqs((prev) => [...prev, { title: "", description: "" }]);
   };
 
   const handleUpdateFaq = async (index) => {
@@ -142,7 +149,7 @@ function Faq() {
   };
 
   const resetFaqData = () => {
-    setFaqData({ question: "", answer: "" });
+    setFaqData({ title: "", description: "" });
   };
 
   return (
@@ -155,23 +162,23 @@ function Faq() {
 
       {/* FAQs */}
       <div className="flex flex-col gap-4">
-        {faqs.map(({ question, answer }, index) => (
+        {faqs.map(({ title, description }, index) => (
           <FaqCard
             key={index}
-            title={question}
-            description={answer}
+            title={title}
+            description={description}
             isActive={activeFaq === index}
             inEditMode={activeEditFaq === index}
-            questionInputValue={faqData.question}
-            answerInputValue={faqData.answer}
+            titleInputValue={faqData.title}
+            descriptionInputValue={faqData.description}
             onClick={() => setActiveFaq(activeFaq === index ? null : index)}
             onClickEdit={() => {
               setActiveFaq(null);
               setActiveEditFaq(activeEditFaq === index ? null : index);
-              setFaqData({ question, answer });
+              setFaqData({ title, description });
             }}
-            onQuestionInputChange={handleChangeInput}
-            onAnswerInputChange={handleChangeInput}
+            onTitleInputChange={handleChangeInput}
+            onDescriptionInputChange={handleChangeInput}
             onSaveFaq={() => handleUpdateFaq(index)}
           />
         ))}

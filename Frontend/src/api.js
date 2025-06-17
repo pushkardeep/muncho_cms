@@ -4,7 +4,7 @@ const API_BASE_URL = "http://localhost:5001/api";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true, 
+  withCredentials: true,
 });
 
 // Hero Section
@@ -122,6 +122,34 @@ export const postFAQ = async (data) => {
 export const updateFAQ = async (id, data) => {
   try {
     const response = await axiosInstance.put(`/faq/${id}`, data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Nav Section
+export const fetchNav = async () => {
+  try {
+    const response = await axiosInstance.get("/nav");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const postNav = async (data) => {
+  try {
+    const response = await axiosInstance.post("/nav", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const updateNav = async (id, data) => {
+  try {
+    const response = await axiosInstance.put(`/nav/${id}`, data);
     return response.data;
   } catch (error) {
     throw error;

@@ -1,5 +1,5 @@
 // Location section model
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const LocationSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -8,7 +8,8 @@ const LocationSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   email: { type: String, required: true },
   mapQuery: { type: String, required: true },
+  enabled: { type: Boolean, default: true }, // Add enabled field for show/hide
   createdAt: { type: Date, default: Date.now },
 });
 
-module.exports = mongoose.model('Location', LocationSchema);
+module.exports = mongoose.model("Location", LocationSchema);
