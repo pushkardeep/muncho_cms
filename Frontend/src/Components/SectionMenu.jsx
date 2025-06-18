@@ -1,10 +1,10 @@
 import React from "react";
 
 // Redux
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 // Actions
-import { addSection } from "../Redux/Slices/sections.slice";
+import { addSection, saveSectionTabs } from "../Redux/Slices/sections.slice";
 
 // Components
 import SectionMenuOption from "./SectionMenuOption";
@@ -26,6 +26,7 @@ import {
 
 function SectionMenu({ setIsSectionMenuOpen }) {
   const dispatch = useDispatch();
+  const sectionTabs = useSelector((state) => state.sections.sectionTabs);
 
   // Function to handle adding a section on click
   // It dispatches the addSection action with the section data
@@ -36,6 +37,16 @@ function SectionMenu({ setIsSectionMenuOpen }) {
       section: sectionKey, // store as string
     };
     dispatch(addSection(data)); // Dispatch the action to add the section
+    // Save to backend after adding
+    setTimeout(() => {
+      dispatch(
+        saveSectionTabs([
+          ...sectionTabs.slice(0, sectionTabs.length - 1),
+          data,
+          sectionTabs[sectionTabs.length - 1],
+        ])
+      );
+    }, 0);
     setIsSectionMenuOpen((prev) => !prev); // Toggle the section menu visibility
   };
   return (

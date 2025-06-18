@@ -1,7 +1,11 @@
-import React, { useState } from "react";
-
-// Redux
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchSectionTabs,
+  deleteSection,
+  updateSectionTabs,
+} from "./Redux/Slices/sections.slice";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 // Icons
 import {
@@ -41,10 +45,43 @@ function App() {
   });
   const [isSectionMenuOpen, setIsSectionMenuOpen] = useState(false);
 
+  const dispatch = useDispatch();
+
   const { sectionTabs } = useSelector((state) => state.sections);
+
+  useEffect(() => {
+    dispatch(fetchSectionTabs());
+  }, [dispatch]);
 
   const toggleSectionMenu = () => {
     setIsSectionMenuOpen((prev) => !prev);
+  };
+
+  // Handle delete
+  const handleDelete = (index, isLocked) => {
+    if (!isLocked) {
+      dispatch(deleteSection(index));
+    }
+  };
+
+  // Split sections
+  const lockedTop = sectionTabs.filter(
+    (s) => s.isLocked && s.section !== "Footer"
+  );
+  const lockedBottom = sectionTabs.filter(
+    (s) => s.isLocked && s.section === "Footer"
+  );
+  const unlocked = sectionTabs.filter((s) => !s.isLocked);
+
+  // Handle drag end for unlocked only
+  const onDragEnd = (result) => {
+    if (!result.destination) return;
+    const reordered = Array.from(unlocked);
+    const [removed] = reordered.splice(result.source.index, 1);
+    reordered.splice(result.destination.index, 0, removed);
+    // Merge back with locked
+    const newTabs = [...lockedTop, ...reordered, ...lockedBottom];
+    dispatch(updateSectionTabs(newTabs));
   };
 
   return (
@@ -126,26 +163,94 @@ function App() {
               </button>
 
               {/* Secton Tabs  */}
-              <div className="w-full h-fit flex flex-col justify-center items-center gap-3 mt-3">
-                {sectionTabs &&
-                  sectionTabs.length > 0 &&
-                  sectionTabs.map(({ name, section, isLocked }, index) => (
-                    <SectionTab
-                      key={index}
-                      Icon={isLocked ? LockKeyhole : ChevronsUpDown}
-                      title={name}
-                      isActive={index === currentSection.index}
-                      onClick={() => {
-                        setCurrentSection({ index, section }); // section is string
-                      }}
-                    />
-                  ))}
+              {/* Locked Top Sections */}
+              <div className="flex flex-col gap-3 mt-3">
+                {lockedTop.map(({ name, section, isLocked }, index) => (
+                  <SectionTab
+                    key={section}
+                    Icon={LockKeyhole}
+                    title={name}
+                    isActive={index === currentSection.index}
+                    onClick={() => setCurrentSection({ index, section })}
+                    showDelete={false}
+                  />
+                ))}
               </div>
-
-              {/* Section Menu  */}
-              {isSectionMenuOpen && (
-                <SectionMenu setIsSectionMenuOpen={setIsSectionMenuOpen} />
-              )}
+              {/* Draggable Unlocked Sections */}
+              <DragDropContext onDragEnd={onDragEnd}>
+                <Droppable droppableId="sectionTabs">
+                  {(provided) => (
+                    <div
+                      className="w-full h-fit flex flex-col justify-center items-center gap-3 mt-6 mb-6"
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {unlocked.map(({ name, section }, idx) => (
+                        <Draggable
+                          key={section}
+                          draggableId={section}
+                          index={idx}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className="w-full"
+                            >
+                              <SectionTab
+                                Icon={ChevronsUpDown}
+                                title={name}
+                                isActive={
+                                  sectionTabs.findIndex(
+                                    (s) => s.section === section
+                                  ) === currentSection.index
+                                }
+                                onClick={() =>
+                                  setCurrentSection({
+                                    index: sectionTabs.findIndex(
+                                      (s) => s.section === section
+                                    ),
+                                    section,
+                                  })
+                                }
+                                showDelete={true}
+                                onDelete={() =>
+                                  handleDelete(
+                                    sectionTabs.findIndex(
+                                      (s) => s.section === section
+                                    ),
+                                    false
+                                  )
+                                }
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+              {/* Locked Bottom Sections */}
+              <div className="flex flex-col gap-3 mt-3">
+                {lockedBottom.map(({ name, section, isLocked }, index) => (
+                  <SectionTab
+                    key={section}
+                    Icon={LockKeyhole}
+                    title={name}
+                    isActive={sectionTabs.length - 1 === currentSection.index}
+                    onClick={() =>
+                      setCurrentSection({
+                        index: sectionTabs.length - 1,
+                        section,
+                      })
+                    }
+                    showDelete={false}
+                  />
+                ))}
+              </div>
             </div>
 
             {/* Content Editing side  */}

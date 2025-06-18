@@ -202,3 +202,13 @@ export const postData = async (data) => {
     throw error;
   }
 };
+
+// Export or send sectionTabs array
+export const sendSectionTabs = async (sectionTabs) => {
+  try {
+    const response = await axiosInstance.post("/sections", { sectionTabs });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

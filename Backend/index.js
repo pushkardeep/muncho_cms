@@ -38,6 +38,7 @@ const locationRoutes = require("./routes/location");
 const faqRoutes = require("./routes/faq");
 const footerRoutes = require("./routes/footer");
 const navfooterRouter = require("./routes/navfooter");
+const sectionsRoutes = require("./routes/sections");
 
 app.use("/api/data", dataRoutes);
 app.use("/api/hero", heroRoutes);
@@ -46,6 +47,7 @@ app.use("/api/location", locationRoutes);
 app.use("/api/faq", faqRoutes);
 app.use("/api/footer", footerRoutes);
 app.use("/api", navfooterRouter);
+app.use("/api", sectionsRoutes);
 
 // ✅ Start server
 const PORT = process.env.PORT || 5000;
