@@ -1,5 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { fetchGallery, postGallery, updateGallery } from "../../api";
+import {
+  fetchGallery,
+  postGallery,
+  updateGallery,
+  uploadImageToMuncho,
+  deleteGalleryImage,
+} from "../../api";
+
+// Inline CrossIcon component for Vite compatibility
+const CrossIcon = (props) => (
+  <svg
+    width={props.width || 16}
+    height={props.height || 16}
+    viewBox="0 0 20 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <path
+      d="M5 5L15 15M15 5L5 15"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+    />
+  </svg>
+);
 
 // Components
 import TabHeading from "../Common/TabHeading";
@@ -51,17 +76,40 @@ function Gallery() {
     }
   };
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onloadend = () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const path = "trial/kalpit/gallery";
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6MTEsImlhdCI6MTc1MDE3MTE2MCwiZXhwIjoxNzUwNzc1OTYwfQ.k3LyoJkZdXCbR5OQkgD9Ujqvh5EbeXLctn0olPGfj1Y";
+      console.log("Bearer token used for upload:", token); // <-- Console the token
+      const fileUrl = await uploadImageToMuncho(file, path, token);
       setGalleryData((prev) => ({
         ...prev,
-        images: [...(prev.images || []), reader.result],
+        images: [...(prev.images || []), { src: fileUrl, alt: path }],
       }));
-    };
-    reader.readAsDataURL(file);
+    } catch (err) {
+      setError("Image upload failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteImage = async (idx) => {
+    if (!galleryData._id) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const updatedGallery = await deleteGalleryImage(galleryData._id, idx);
+      setGalleryData(updatedGallery);
+    } catch (err) {
+      setError("Failed to delete image");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -83,12 +131,22 @@ function Gallery() {
           {galleryData.images && galleryData.images.length > 0
             ? [
                 ...galleryData.images.map((img, idx) => (
-                  <img
-                    key={idx}
-                    src={img}
-                    alt={`gallery-img-${idx}`}
-                    className="bg-[#F8F7FA] aspect-square object-cover"
-                  />
+                  <div key={idx} className="relative">
+                    <img
+                      src={img.src}
+                      alt={img.alt || `gallery-img-${idx}`}
+                      className="bg-[#F8F7FA] aspect-square object-cover"
+                    />
+                    <button
+                      className="absolute top-1 right-1 bg-red-500 rounded-full p-1 shadow hover:bg-red-600 text-white transition-colors"
+                      style={{ zIndex: 2 }}
+                      onClick={() => handleDeleteImage(idx)}
+                      aria-label="Delete image"
+                      disabled={loading}
+                    >
+                      <CrossIcon width={16} height={16} />
+                    </button>
+                  </div>
                 )),
                 galleryData.images.length < 9 && (
                   <ImgUploader

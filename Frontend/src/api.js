@@ -63,6 +63,17 @@ export const updateGallery = async (id, data) => {
   }
 };
 
+export const deleteGalleryImage = async (galleryId, imageIdx) => {
+  try {
+    const response = await axiosInstance.delete(
+      `/gallery/${galleryId}/image/${imageIdx}`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Location Section
 export const fetchLocations = async () => {
   try {
@@ -210,5 +221,25 @@ export const sendSectionTabs = async (sectionTabs) => {
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+
+// Upload image to external API and return fileUrl
+export const uploadImageToMuncho = async (file, path, token) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("path", path);
+  const response = await fetch("https://api.muncho.in/api/file/upload", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+  const data = await response.json();
+  if (data.status && data.fileUrl) {
+    return data.fileUrl;
+  } else {
+    throw new Error(data.message || "Image upload failed");
   }
 };

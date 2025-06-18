@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchHero, postHero } from "../../api";
+import { fetchHero, postHero, uploadImageToMuncho } from "../../api";
 
 // components
 import BigBtn from "./Components/Common/BigBtn";
@@ -31,7 +31,6 @@ function Hero() {
       setLoading(true);
       try {
         const data = await fetchHero();
-        console.log("Hero Data:", data);
         if (data) {
           setHeroSectionData((prev) => ({ ...prev, data: data }));
         }
@@ -68,6 +67,34 @@ function Hero() {
     } finally {
       setLoading(false);
       setTimeout(() => setSuccess(false), 2000);
+    }
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const path = "trial/kalpit/hero";
+      const token =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdGFmZl9pZCI6MTEsImlhdCI6MTc1MDE3MTE2MCwiZXhwIjoxNzUwNzc1OTYwfQ.k3LyoJkZdXCbR5OQkgD9Ujqvh5EbeXLctn0olPGfj1Y";
+      const fileUrl = await uploadImageToMuncho(file, path, token);
+      setHeroSectionData((prev) => ({
+        ...prev,
+        data: {
+          ...prev.data,
+          bg_image: {
+            ...prev.data.bg_image,
+            src: fileUrl,
+            alt: path,
+          },
+        },
+      }));
+    } catch (err) {
+      setError("Image upload failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -140,7 +167,11 @@ function Hero() {
           </div>
 
           {/* Image Uploader */}
-          <ImgUploader title={"Background Image"} styles="bg-transparent" />
+          <ImgUploader
+            title={"Background Image"}
+            styles="bg-transparent"
+            onChange={handleImageUpload}
+          />
         </div>
       </div>
     </div>
