@@ -24,7 +24,7 @@ import {
   SquareChartGantt,
 } from "lucide-react";
 
-function SectionMenu({ setIsSectionMenuOpen }) {
+function SectionMenu({ setIsSectionMenuOpen, onSectionAdded }) {
   const dispatch = useDispatch();
   const sectionTabs = useSelector((state) => state.sections.sectionTabs);
 
@@ -46,11 +46,15 @@ function SectionMenu({ setIsSectionMenuOpen }) {
           sectionTabs[sectionTabs.length - 1],
         ])
       );
+      if (onSectionAdded) {
+        // Call the callback to update current section in App.jsx
+        onSectionAdded(sectionKey);
+      }
     }, 0);
     setIsSectionMenuOpen((prev) => !prev); // Toggle the section menu visibility
   };
   return (
-    <div className="absolute top-[50%] -translate-y-[50%] left-1/2 -translate-x-1/2 w-[95%] h-fit grid grid-cols-2 gap-2 rounded-[8px] bg-white shadow p-2 z-50">
+    <div className="absolute -left-5 top-full mt-3 w-[300px] h-fit grid grid-cols-2 gap-2 rounded-[8px] bg-white shadow p-2 z-50">
       <SectionMenuOption
         Icon={Images}
         label={"Gallery"}

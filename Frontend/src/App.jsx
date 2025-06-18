@@ -84,6 +84,15 @@ function App() {
     dispatch(updateSectionTabs(newTabs));
   };
 
+  // Callback to set current section after adding
+  const handleSectionAdded = (sectionKey) => {
+    // Find the new section's index
+    const idx = sectionTabs.findIndex((s) => s.section === sectionKey);
+    if (idx !== -1) {
+      setCurrentSection({ index: idx, section: sectionKey });
+    }
+  };
+
   return (
     <div className="w-screen h-fit overflow-hidden relative">
       <div className="w-screen h-screen flex items-center overflow-hidden relative">
@@ -145,22 +154,30 @@ function App() {
 
           <div className="w-full flex-1 min-h-fit flex justify-center items-start">
             {/*  Section Tabs Bar  */}
-            <div className="w-[300px] h-[90vh] border-r border-r-[#E8E6ED] px-5 overflow-y-auto relative">
+            <div className="w-[300px] h-[90vh] border-r border-r-[#E8E6ED] px-5 overflow-visible relative">
               {/* Heading  */}
               <h1 className="poppins_med text-[#201F33] text-[24px]">
                 Website
               </h1>
 
               {/* Add Section Bar  */}
-              <button
-                onClick={toggleSectionMenu}
-                className="w-full h-fit bg-black rounded-[8px] flex justify-between items-center p-3 cursor-pointer mt-5"
-              >
-                <span className="poppins_reg text-white text-[14px]">
-                  Add Section
-                </span>
-                <CirclePlus color="white" size={24} />
-              </button>
+              <div className="relative w-full">
+                <button
+                  onClick={toggleSectionMenu}
+                  className="w-full h-fit bg-black rounded-[8px] flex justify-between items-center p-3 cursor-pointer mt-5"
+                >
+                  <span className="poppins_reg text-white text-[14px]">
+                    Add Section
+                  </span>
+                  <CirclePlus color="white" size={24} />
+                </button>
+                {isSectionMenuOpen && (
+                  <SectionMenu
+                    setIsSectionMenuOpen={setIsSectionMenuOpen}
+                    onSectionAdded={handleSectionAdded}
+                  />
+                )}
+              </div>
 
               {/* Secton Tabs  */}
               {/* Locked Top Sections */}
