@@ -14,7 +14,9 @@ router.get("/nav", async (req, res) => {
 
 router.post("/nav", async (req, res) => {
   try {
-    const nav = new Nav(req.body);
+    const { userId, ...rest } = req.body;
+    if (!userId) return res.status(400).json({ error: "userId is required" });
+    const nav = new Nav({ ...rest, userId });
     await nav.save();
     res.status(201).json(nav);
   } catch (err) {
@@ -45,7 +47,9 @@ router.get("/footer", async (req, res) => {
 
 router.post("/footer", async (req, res) => {
   try {
-    const footer = new Footer(req.body);
+    const { userId, ...rest } = req.body;
+    if (!userId) return res.status(400).json({ error: "userId is required" });
+    const footer = new Footer({ ...rest, userId });
     await footer.save();
     res.status(201).json(footer);
   } catch (err) {

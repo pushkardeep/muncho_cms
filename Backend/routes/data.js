@@ -27,13 +27,30 @@ router.post("/", async (req, res) => {
   }
 });
 
-// GET: Retrieve all data for a user
+// GET: Retrieve all section data for a user
 router.get("/", async (req, res) => {
   try {
     const { userId } = req.query;
     if (!userId) return res.status(400).json({ error: "userId is required" });
-    const datas = await Data.find({ userId }).sort({ createdAt: -1 });
-    res.json(datas);
+    const [heros, galleries, faqs, footers, locations, navs, datas] =
+      await Promise.all([
+        Hero.find({ userId }).sort({ createdAt: -1 }),
+        Gallery.find({ userId }).sort({ createdAt: -1 }),
+        FAQ.find({ userId }).sort({ createdAt: -1 }),
+        Footer.find({ userId }).sort({ createdAt: -1 }),
+        Location.find({ userId }).sort({ createdAt: -1 }),
+        Nav.find({ userId }).sort({ createdAt: -1 }),
+        Data.find({ userId }).sort({ createdAt: -1 }),
+      ]);
+    res.json({
+      hero: heros,
+      gallery: galleries,
+      faq: faqs,
+      footer: footers,
+      location: locations,
+      nav: navs,
+      data: datas,
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -76,7 +93,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 // GET: Retrieve all data for preview (section-wise)
-router.get("/", async (req, res) => {
+router.get("/preview", async (req, res) => {
   try {
     const [heros, galleries, faqs, footers, locations, navs, datas] =
       await Promise.all([
