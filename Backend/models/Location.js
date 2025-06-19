@@ -10,6 +10,7 @@ const LocationSchema = new mongoose.Schema({
   mapQuery: { type: String, required: true },
   enabled: { type: Boolean, default: true }, // Add enabled field for show/hide
   createdAt: { type: Date, default: Date.now },
+  userId: { type: String, required: true }, // Associate location with a user
 });
 
 module.exports = mongoose.model("Location", LocationSchema);

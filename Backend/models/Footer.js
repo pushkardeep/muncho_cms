@@ -38,6 +38,7 @@ const FooterSchema = new mongoose.Schema({
       alt: { type: String, required: true },
     },
   ],
+  userId: { type: String, required: true }, // Associate footer with a user
 });
 
 module.exports =

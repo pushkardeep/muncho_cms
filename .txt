@@ -3,48 +3,199 @@ API Endpoints for Frontend Integration
 
 Base URL: http://localhost:5000/api
 
+All endpoints below require a userId (as a query param for GET, or in the body for POST/PUT/DELETE).
+
 1. Hero Section (/api/hero)
-   - GET    /api/hero           → Get the current hero section
-   - POST   /api/hero           → Create a new hero section (body: { text, bg_image })
-   - PUT    /api/hero/:id       → Update hero section by ID
+   - GET    /api/hero?userId=USER_ID           → Get the current hero section for a user
+   - POST   /api/hero           → Create a new hero section (body: { text, bg_image, userId })
+   - PUT    /api/hero/:id       → Update hero section by ID (body: { text, bg_image, userId })
+   - DELETE /api/hero/:id       → Delete hero section by ID (body: { userId })
 
 2. Gallery Section (/api/gallery)
-   - GET    /api/gallery        → Get the current gallery section
-   - POST   /api/gallery        → Create a new gallery (body: { title, subtitle, images })
-   - PUT    /api/gallery/:id    → Update gallery by ID
+   - GET    /api/gallery?userId=USER_ID        → Get the current gallery section for a user
+   - POST   /api/gallery        → Create a new gallery (body: { title, subtitle, images, userId })
+   - PUT    /api/gallery/:id    → Update gallery by ID (body: { title, subtitle, images, userId })
+   - DELETE /api/gallery/:id    → Delete gallery by ID (body: { userId })
 
 3. Location Section (/api/location)
-   - GET    /api/location       → Get all locations
-   - POST   /api/location       → Add a new location (body: { name, city, address, phone, email, mapQuery })
-   - PUT    /api/location/:id   → Update a location by ID
-   - DELETE /api/location/:id   → Delete a location by ID
+   - GET    /api/location?userId=USER_ID       → Get all locations for a user
+   - POST   /api/location       → Add a new location (body: { name, city, address, phone, email, mapQuery, userId })
+   - PUT    /api/location/:id   → Update a location by ID (body: { name, city, address, phone, email, mapQuery, userId })
+   - DELETE /api/location/:id   → Delete a location by ID (body: { userId })
 
 4. FAQ Section (/api/faq)
-   - GET    /api/faq            → Get the FAQ section
-   - POST   /api/faq            → Create FAQ (body: { heading, questions })
-   - PUT    /api/faq/:id        → Update FAQ by ID
+   - GET    /api/faq?userId=USER_ID           → Get the FAQ section for a user
+   - POST   /api/faq            → Create FAQ (body: { heading, questions, userId })
+   - PUT    /api/faq/:id        → Update FAQ by ID (body: { heading, questions, userId })
+   - DELETE /api/faq/:id        → Delete FAQ by ID (body: { userId })
 
 5. Footer Section (/api/footer)
-   - GET    /api/footer         → Get the footer section
-   - POST   /api/footer         → Create footer (body: { links, legalLinks, socialLinks, madeWith, cta })
-   - PUT    /api/footer/:id     → Update footer by ID
+   - GET    /api/footer?userId=USER_ID        → Get the footer section for a user
+   - POST   /api/footer         → Create footer (body: { links, legalLinks, socialLinks, madeWith, cta, userId })
+   - PUT    /api/footer/:id     → Update footer by ID (body: { links, legalLinks, socialLinks, madeWith, cta, userId })
+   - DELETE /api/footer/:id     → Delete footer by ID (body: { userId })
 
 6. Data (General) (/api/data)
-   - GET    /api/data           → Get all data
-   - POST   /api/data           → Upload data (body: { title, content })
+   - GET    /api/data?userId=USER_ID          → Get all data for a user
+   - POST   /api/data           → Upload data (body: { title, content, userId })
+   - PUT    /api/data/:id       → Update data by ID (body: { title, content, userId })
+   - DELETE /api/data/:id       → Delete data by ID (body: { userId })
+
+Updated API Functions (Frontend)
+===============================
+
+```javascript
+import axios from "axios";
+
+const API_BASE_URL = "http://localhost:5001/api";
+
+const axiosInstance = axios.create({
+  baseURL: API_BASE_URL,
+  withCredentials: true,
+});
+
+// Hero Section
+export const fetchHero = async (userId) => {
+  const response = await axiosInstance.get("/hero", { params: { userId } });
+  return response.data;
+};
+export const postHero = async (data, userId) => {
+  const response = await axiosInstance.post("/hero", { ...data, userId });
+  return response.data;
+};
+export const updateHero = async (id, data, userId) => {
+  const response = await axiosInstance.put(`/hero/${id}`, { ...data, userId });
+  return response.data;
+};
+export const deleteHero = async (id, userId) => {
+  const response = await axiosInstance.delete(`/hero/${id}`, {
+    data: { userId },
+  });
+  return response.data;
+};
+
+// Gallery Section
+export const fetchGallery = async (userId) => {
+  const response = await axiosInstance.get("/gallery", { params: { userId } });
+  return response.data;
+};
+export const postGallery = async (data, userId) => {
+  const response = await axiosInstance.post("/gallery", { ...data, userId });
+  return response.data;
+};
+export const updateGallery = async (id, data, userId) => {
+  const response = await axiosInstance.put(`/gallery/${id}`, {
+    ...data,
+    userId,
+  });
+  return response.data;
+};
+export const deleteGallery = async (id, userId) => {
+  const response = await axiosInstance.delete(`/gallery/${id}`, {
+    data: { userId },
+  });
+  return response.data;
+};
+
+// Location Section
+export const fetchLocations = async (userId) => {
+  const response = await axiosInstance.get("/location", { params: { userId } });
+  return response.data;
+};
+export const postLocation = async (data, userId) => {
+  const response = await axiosInstance.post("/location", { ...data, userId });
+  return response.data;
+};
+export const updateLocation = async (id, data, userId) => {
+  const response = await axiosInstance.put(`/location/${id}`, {
+    ...data,
+    userId,
+  });
+  return response.data;
+};
+export const deleteLocation = async (id, userId) => {
+  const response = await axiosInstance.delete(`/location/${id}`, {
+    data: { userId },
+  });
+  return response.data;
+};
+
+// FAQ Section
+export const fetchFAQ = async (userId) => {
+  const response = await axiosInstance.get("/faq", { params: { userId } });
+  return response.data;
+};
+export const postFAQ = async (data, userId) => {
+  const response = await axiosInstance.post("/faq", { ...data, userId });
+  return response.data;
+};
+export const updateFAQ = async (id, data, userId) => {
+  const response = await axiosInstance.put(`/faq/${id}`, { ...data, userId });
+  return response.data;
+};
+export const deleteFAQ = async (id, userId) => {
+  const response = await axiosInstance.delete(`/faq/${id}`, {
+    data: { userId },
+  });
+  return response.data;
+};
+
+// Footer Section
+export const fetchFooter = async (userId) => {
+  const response = await axiosInstance.get("/footer", { params: { userId } });
+  return response.data;
+};
+export const postFooter = async (data, userId) => {
+  const response = await axiosInstance.post("/footer", { ...data, userId });
+  return response.data;
+};
+export const updateFooter = async (id, data, userId) => {
+  const response = await axiosInstance.put(`/footer/${id}`, {
+    ...data,
+    userId,
+  });
+  return response.data;
+};
+export const deleteFooter = async (id, userId) => {
+  const response = await axiosInstance.delete(`/footer/${id}`, {
+    data: { userId },
+  });
+  return response.data;
+};
+
+// Data (General)
+export const fetchData = async (userId) => {
+  const response = await axiosInstance.get("/data", { params: { userId } });
+  return response.data;
+};
+export const postData = async (data, userId) => {
+  const response = await axiosInstance.post("/data", { ...data, userId });
+  return response.data;
+};
+export const updateData = async (id, data, userId) => {
+  const response = await axiosInstance.put(`/data/${id}`, { ...data, userId });
+  return response.data;
+};
+export const deleteData = async (id, userId) => {
+  const response = await axiosInstance.delete(`/data/${id}`, {
+    data: { userId },
+  });
+  return response.data;
+};
+```
 
 How to use:
-- For GET requests, fetch data to display.
-- For POST/PUT, send JSON in the request body.
-- For DELETE, use the location ID in the URL.
+- For GET requests, always include userId as a query parameter.
+- For POST/PUT/DELETE, always include userId in the request body.
+- For DELETE, send userId in the body (not as a query param).
 
 Example fetch (GET):
-fetch('http://localhost:5000/api/hero').then(res => res.json())
+fetch('http://localhost:5000/api/hero?userId=USER_ID').then(res => res.json())
 
 Example fetch (POST):
 fetch('http://localhost:5000/api/hero', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ text: {...}, bg_image: {...} })
+  body: JSON.stringify({ text: {...}, bg_image: {...}, userId: 'USER_ID' })
 })
 .then(res => res.json())

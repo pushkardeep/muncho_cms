@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5001/api";
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -8,27 +9,38 @@ const axiosInstance = axios.create({
 });
 
 // Hero Section
-export const fetchHero = async () => {
+export const fetchHero = async (userId) => {
   try {
-    const response = await axiosInstance.get("/hero");
+    const response = await axiosInstance.get("/hero", { params: { userId } });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const postHero = async (data) => {
+export const postHero = async (data, userId) => {
   try {
-    const response = await axiosInstance.post("/hero", data);
+    const response = await axiosInstance.post("/hero", { ...data, userId });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const updateHero = async (id, data) => {
+export const updateHero = async (id, data, userId) => {
   try {
-    const response = await axiosInstance.put(`/hero/${id}`, data);
+    const response = await axiosInstance.put(`/hero/${id}`, {
+      ...data,
+      userId,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const deleteHero = async (id, userId) => {
+  try {
+    const response = await axiosInstance.delete(`/hero/${id}`, {
+      data: { userId },
+    });
     return response.data;
   } catch (error) {
     throw error;
@@ -36,38 +48,40 @@ export const updateHero = async (id, data) => {
 };
 
 // Gallery Section
-export const fetchGallery = async () => {
+export const fetchGallery = async (userId) => {
   try {
-    const response = await axiosInstance.get("/gallery");
+    const response = await axiosInstance.get("/gallery", {
+      params: { userId },
+    });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const postGallery = async (data) => {
+export const postGallery = async (data, userId) => {
   try {
-    const response = await axiosInstance.post("/gallery", data);
+    const response = await axiosInstance.post("/gallery", { ...data, userId });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const updateGallery = async (id, data) => {
+export const updateGallery = async (id, data, userId) => {
   try {
-    const response = await axiosInstance.put(`/gallery/${id}`, data);
+    const response = await axiosInstance.put(`/gallery/${id}`, {
+      ...data,
+      userId,
+    });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const deleteGalleryImage = async (galleryId, imageIdx) => {
+export const deleteGallery = async (id, userId) => {
   try {
-    const response = await axiosInstance.delete(
-      `/gallery/${galleryId}/image/${imageIdx}`
-    );
+    const response = await axiosInstance.delete(`/gallery/${id}`, {
+      data: { userId },
+    });
     return response.data;
   } catch (error) {
     throw error;
@@ -75,36 +89,40 @@ export const deleteGalleryImage = async (galleryId, imageIdx) => {
 };
 
 // Location Section
-export const fetchLocations = async () => {
+export const fetchLocations = async (userId) => {
   try {
-    const response = await axiosInstance.get("/location");
+    const response = await axiosInstance.get("/location", {
+      params: { userId },
+    });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const postLocation = async (data) => {
+export const postLocation = async (data, userId) => {
   try {
-    const response = await axiosInstance.post("/location", data);
+    const response = await axiosInstance.post("/location", { ...data, userId });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const updateLocation = async (id, data) => {
+export const updateLocation = async (id, data, userId) => {
   try {
-    const response = await axiosInstance.put(`/location/${id}`, data);
+    const response = await axiosInstance.put(`/location/${id}`, {
+      ...data,
+      userId,
+    });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const deleteLocation = async (id) => {
+export const deleteLocation = async (id, userId) => {
   try {
-    const response = await axiosInstance.delete(`/location/${id}`);
+    const response = await axiosInstance.delete(`/location/${id}`, {
+      data: { userId },
+    });
     return response.data;
   } catch (error) {
     throw error;
@@ -112,27 +130,35 @@ export const deleteLocation = async (id) => {
 };
 
 // FAQ Section
-export const fetchFAQ = async () => {
+export const fetchFAQ = async (userId) => {
   try {
-    const response = await axiosInstance.get("/faq");
+    const response = await axiosInstance.get("/faq", { params: { userId } });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const postFAQ = async (data) => {
+export const postFAQ = async (data, userId) => {
   try {
-    const response = await axiosInstance.post("/faq", data);
+    const response = await axiosInstance.post("/faq", { ...data, userId });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const updateFAQ = async (id, data) => {
+export const updateFAQ = async (id, data, userId) => {
   try {
-    const response = await axiosInstance.put(`/faq/${id}`, data);
+    const response = await axiosInstance.put(`/faq/${id}`, { ...data, userId });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const deleteFAQ = async (id, userId) => {
+  try {
+    const response = await axiosInstance.delete(`/faq/${id}`, {
+      data: { userId },
+    });
     return response.data;
   } catch (error) {
     throw error;
@@ -148,7 +174,6 @@ export const fetchNav = async () => {
     throw error;
   }
 };
-
 export const postNav = async (data) => {
   try {
     const response = await axiosInstance.post("/nav", data);
@@ -157,7 +182,6 @@ export const postNav = async (data) => {
     throw error;
   }
 };
-
 export const updateNav = async (id, data) => {
   try {
     const response = await axiosInstance.put(`/nav/${id}`, data);
@@ -168,27 +192,38 @@ export const updateNav = async (id, data) => {
 };
 
 // Footer Section
-export const fetchFooter = async () => {
+export const fetchFooter = async (userId) => {
   try {
-    const response = await axiosInstance.get("/footer");
+    const response = await axiosInstance.get("/footer", { params: { userId } });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const postFooter = async (data) => {
+export const postFooter = async (data, userId) => {
   try {
-    const response = await axiosInstance.post("/footer", data);
+    const response = await axiosInstance.post("/footer", { ...data, userId });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const updateFooter = async (id, data) => {
+export const updateFooter = async (id, data, userId) => {
   try {
-    const response = await axiosInstance.put(`/footer/${id}`, data);
+    const response = await axiosInstance.put(`/footer/${id}`, {
+      ...data,
+      userId,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const deleteFooter = async (id, userId) => {
+  try {
+    const response = await axiosInstance.delete(`/footer/${id}`, {
+      data: { userId },
+    });
     return response.data;
   } catch (error) {
     throw error;
@@ -196,18 +231,38 @@ export const updateFooter = async (id, data) => {
 };
 
 // Data (General)
-export const fetchData = async () => {
+export const fetchData = async (userId) => {
   try {
-    const response = await axiosInstance.get("/data");
+    const response = await axiosInstance.get("/data", { params: { userId } });
     return response.data;
   } catch (error) {
     throw error;
   }
 };
-
-export const postData = async (data) => {
+export const postData = async (data, userId) => {
   try {
-    const response = await axiosInstance.post("/data", data);
+    const response = await axiosInstance.post("/data", { ...data, userId });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const updateData = async (id, data, userId) => {
+  try {
+    const response = await axiosInstance.put(`/data/${id}`, {
+      ...data,
+      userId,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const deleteData = async (id, userId) => {
+  try {
+    const response = await axiosInstance.delete(`/data/${id}`, {
+      data: { userId },
+    });
     return response.data;
   } catch (error) {
     throw error;
