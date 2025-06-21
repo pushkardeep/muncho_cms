@@ -8,6 +8,7 @@ const LinkSchema = new mongoose.Schema({
 
 const NavSchema = new mongoose.Schema(
   {
+    userId: { type: String, required: true },
     links: [
       {
         title: { type: String, required: true },
