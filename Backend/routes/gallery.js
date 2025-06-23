@@ -3,38 +3,54 @@ const express = require("express");
 const router = express.Router();
 const Gallery = require("../models/Gallery");
 
-// GET: Retrieve gallery section for a user
+// GET: Retrieve gallery section for a user and sectionId
 router.get("/", async (req, res) => {
   try {
-    const { userId } = req.query;
-    if (!userId) return res.status(400).json({ error: "userId is required" });
-    const gallery = await Gallery.findOne({ userId }).sort({ createdAt: -1 });
+    const { userId, sectionId } = req.query;
+    if (!userId || !sectionId)
+      return res
+        .status(400)
+        .json({ error: "userId and sectionId are required" });
+    const gallery = await Gallery.findOne({ userId, sectionId });
     res.json(gallery);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// POST: Create gallery section for a user
+// POST: Create or update gallery section for a user and sectionId
 router.post("/", async (req, res) => {
   try {
-    const { title, subtitle, images, userId } = req.body;
-    if (!userId) return res.status(400).json({ error: "userId is required" });
-    const gallery = new Gallery({ title, subtitle, images, userId });
-    await gallery.save();
+    const { title, subtitle, images, userId, sectionId } = req.body;
+    if (!userId || !sectionId)
+      return res
+        .status(400)
+        .json({ error: "userId and sectionId are required" });
+    let gallery = await Gallery.findOneAndUpdate(
+      { userId, sectionId },
+      { title, subtitle, images },
+      { new: true }
+    );
+    if (!gallery) {
+      gallery = new Gallery({ title, subtitle, images, userId, sectionId });
+      await gallery.save();
+    }
     res.status(201).json(gallery);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-// PUT: Update gallery section (by id) for a user
+// PUT: Update gallery section (by id) for a user and sectionId
 router.put("/:id", async (req, res) => {
   try {
-    const { title, subtitle, images, userId } = req.body;
-    if (!userId) return res.status(400).json({ error: "userId is required" });
+    const { title, subtitle, images, userId, sectionId } = req.body;
+    if (!userId || !sectionId)
+      return res
+        .status(400)
+        .json({ error: "userId and sectionId are required" });
     const gallery = await Gallery.findOneAndUpdate(
-      { _id: req.params.id, userId },
+      { _id: req.params.id, userId, sectionId },
       { title, subtitle, images },
       { new: true }
     );
@@ -48,14 +64,18 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// DELETE: Remove gallery section by id for a user
+// DELETE: Remove gallery section by id for a user and sectionId
 router.delete("/:id", async (req, res) => {
   try {
-    const { userId } = req.body;
-    if (!userId) return res.status(400).json({ error: "userId is required" });
+    const { userId, sectionId } = req.body;
+    if (!userId || !sectionId)
+      return res
+        .status(400)
+        .json({ error: "userId and sectionId are required" });
     const gallery = await Gallery.findOneAndDelete({
       _id: req.params.id,
       userId,
+      sectionId,
     });
     if (!gallery)
       return res
