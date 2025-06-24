@@ -39,6 +39,9 @@ const faqRoutes = require("./routes/faq");
 const footerRoutes = require("./routes/footer");
 const navfooterRouter = require("./routes/navfooter");
 const sectionListRoutes = require("./routes/sectionlist");
+const featureSectionRoutes = require("./routes/featureSection");
+const dishRouter = require("./routes/dish");
+const reviewRouter = require("./routes/review");
 
 app.use("/api/data", dataRoutes);
 app.use("/api/hero", heroRoutes);
@@ -48,6 +51,9 @@ app.use("/api/faq", faqRoutes);
 app.use("/api/footer", footerRoutes);
 app.use("/api", navfooterRouter);
 app.use("/api", sectionListRoutes);
+app.use("/api/feature-section", featureSectionRoutes);
+app.use("/api/dish", dishRouter);
+app.use("/api/review", reviewRouter);
 
 // ✅ Start server
 const PORT = process.env.PORT || 5000;
