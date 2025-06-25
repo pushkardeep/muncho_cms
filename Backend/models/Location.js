@@ -13,4 +13,4 @@ const LocationSchema = new mongoose.Schema({
   userId: { type: String, required: true }, // Associate location with a user
 });
 
-module.exports = mongoose.model("Location", LocationSchema);
+module.exports = mongoose.model("Locations", LocationSchema);
