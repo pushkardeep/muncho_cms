@@ -12,6 +12,19 @@ router.get("/nav", async (req, res) => {
   }
 });
 
+router.get("/nav/:userId", async (req, res) => {
+  try {
+    const nav = await Nav.findOne({ userId: req.params.userId });
+    if (!nav)
+      return res
+        .status(404)
+        .json({ error: "Navigation not found for this user" });
+    res.json(nav);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 router.post("/nav", async (req, res) => {
   try {
     const { userId, ...rest } = req.body;

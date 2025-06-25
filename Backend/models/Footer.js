@@ -29,6 +29,7 @@ const FooterSchema = new mongoose.Schema({
     {
       label: { type: String, required: true },
       href: { type: String, required: true },
+      enabled: { type: Boolean, default: true },
     },
   ],
   socialLinks: [

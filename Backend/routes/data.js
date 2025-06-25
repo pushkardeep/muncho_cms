@@ -30,27 +30,45 @@ router.post("/", async (req, res) => {
 // GET: Retrieve all section data for a user
 router.get("/", async (req, res) => {
   try {
-    const { userId } = req.query;
+    const { userId, sections } = req.query;
     if (!userId) return res.status(400).json({ error: "userId is required" });
-    const [heros, galleries, faqs, footers, locations, navs, datas] =
-      await Promise.all([
-        Hero.find({ userId }).sort({ createdAt: -1 }),
-        Gallery.find({ userId }).sort({ createdAt: -1 }),
-        FAQ.find({ userId }).sort({ createdAt: -1 }),
-        Footer.find({ userId }).sort({ createdAt: -1 }),
-        Location.find({ userId }).sort({ createdAt: -1 }),
-        Nav.find({ userId }).sort({ createdAt: -1 }),
-        Data.find({ userId }).sort({ createdAt: -1 }),
-      ]);
-    res.json({
-      hero: heros,
-      gallery: galleries,
-      faq: faqs,
-      footer: footers,
-      location: locations,
-      nav: navs,
-      data: datas,
+
+    // Map section keys to their corresponding model queries
+    const sectionMap = {
+      hero: () => Hero.find({ userId }).sort({ createdAt: -1 }),
+      gallery: () => Gallery.find({ userId }).sort({ createdAt: -1 }),
+      faq: () => FAQ.find({ userId }).sort({ createdAt: -1 }),
+      footer: () => Footer.find({ userId }).sort({ createdAt: -1 }),
+      location: () => Location.find({ userId }).sort({ createdAt: -1 }),
+      nav: () => Nav.find({ userId }).sort({ createdAt: -1 }),
+      data: () => Data.find({ userId }).sort({ createdAt: -1 }),
+    };
+
+    let selectedSections;
+    if (sections) {
+      // Parse comma-separated list, trim whitespace, and filter valid keys
+      selectedSections = sections
+        .split(",")
+        .map((s) => s.trim().toLowerCase())
+        .filter((s) => sectionMap[s]);
+      if (selectedSections.length === 0) {
+        return res.status(400).json({ error: "No valid sections provided" });
+      }
+    } else {
+      // Default: all sections
+      selectedSections = Object.keys(sectionMap);
+    }
+
+    // Fetch only the requested sections
+    const results = await Promise.all(
+      selectedSections.map((key) => sectionMap[key]())
+    );
+    // Build response object
+    const response = {};
+    selectedSections.forEach((key, idx) => {
+      response[key] = results[idx];
     });
+    res.json(response);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

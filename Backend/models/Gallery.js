@@ -12,6 +12,7 @@ const GallerySchema = new mongoose.Schema({
   ],
   createdAt: { type: Date, default: Date.now },
   userId: { type: String, required: true }, // Associate gallery with a user
+  sectionId: { type: String, required: true }, // Unique section instance
 });
 
 module.exports = mongoose.model("Gallery", GallerySchema);
