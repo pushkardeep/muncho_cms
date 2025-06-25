@@ -7,6 +7,9 @@ const FAQ = require("../models/FAQ");
 const Footer = require("../models/Footer");
 const Location = require("../models/Location");
 const { Nav } = require("../models/NavFooter");
+const Dish = require("../models/Dish"); // Added for menu
+const FeatureSection = require("../models/FeatureSection"); // Added for features
+const Review = require("../models/Review"); // Added for reviews
 
 // Middleware example: log request method and path
 router.use((req, res, next) => {
@@ -42,6 +45,9 @@ router.get("/", async (req, res) => {
       location: () => Location.find({ userId }).sort({ createdAt: -1 }),
       nav: () => Nav.find({ userId }).sort({ createdAt: -1 }),
       data: () => Data.find({ userId }).sort({ createdAt: -1 }),
+      menu: () => Dish.find({ userId }).sort({ createdAt: -1 }), // Added for menu
+      features: () => FeatureSection.find({ userId }), // Added for features
+      reviews: () => Review.find({ userId }), // Added for reviews
     };
 
     let selectedSections;
