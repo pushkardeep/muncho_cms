@@ -4,7 +4,7 @@ import {
   postGallery,
   updateGallery,
   uploadImageToMuncho,
-  deleteGalleryImage,
+  // deleteGalleryImage,
 } from "../../api";
 
 // Inline CrossIcon component for Vite compatibility
@@ -99,17 +99,17 @@ function Gallery() {
   };
 
   const handleDeleteImage = async (idx) => {
-    if (!galleryData._id) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const updatedGallery = await deleteGalleryImage(galleryData._id, idx);
-      setGalleryData(updatedGallery);
-    } catch (err) {
-      setError("Failed to delete image");
-    } finally {
-      setLoading(false);
-    }
+    // if (!galleryData._id) return;
+    // setLoading(true);
+    // setError(null);
+    // try {
+    //   const updatedGallery = await deleteGalleryImage(galleryData._id, idx);
+    //   setGalleryData(updatedGallery);
+    // } catch (err) {
+    //   setError("Failed to delete image");
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   return (

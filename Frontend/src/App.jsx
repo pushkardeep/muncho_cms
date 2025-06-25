@@ -26,6 +26,11 @@ import Locations from "./Components/Sections/Locations";
 import Faq from "./Components/Sections/Faq";
 import SectionTab from "./Components/SectionTab";
 import SectionMenu from "./Components/SectionMenu";
+import Catering from "./Components/Sections/Catering";
+import Dishes from "./Components/Sections/Dishes";
+import GiftCard from "./Components/Sections/giftCard";
+import Reviews from "./Components/Sections/Reviews";
+import Features from "./Components/Sections/Features";
 
 // Section component mapping
 const sectionComponentMap = {
@@ -272,11 +277,8 @@ function App() {
 
             {/* Content Editing side  */}
             <div className="flex-1 h-[90vh] relative overflow-y-auto px-10">
-              {sectionComponentMap[currentSection.section] &&
-                React.createElement(
-                  sectionComponentMap[currentSection.section]
-                )}
-            </div>
+              <Features />
+            </div>  
           </div>
         </div>
       </div>

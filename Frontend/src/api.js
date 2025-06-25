@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:5001/api";
+const API_BASE_URL = "http://localhost:5001/api";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -11,7 +10,7 @@ const axiosInstance = axios.create({
 // Hero Section
 export const fetchHero = async (userId) => {
   try {
-    const response = await axiosInstance.get("/hero", { params: { userId } });
+    const response = await axiosInstance.get("/hero?userId=hardcoded-user-id-123", { params: { userId } });
     return response.data;
   } catch (error) {
     throw error;
@@ -19,7 +18,7 @@ export const fetchHero = async (userId) => {
 };
 export const postHero = async (data, userId) => {
   try {
-    const response = await axiosInstance.post("/hero", { ...data, userId });
+    const response = await axiosInstance.post("/hero?userId=hardcoded-user-id-123", { ...data, userId });
     return response.data;
   } catch (error) {
     throw error;
@@ -50,7 +49,7 @@ export const deleteHero = async (id, userId) => {
 // Gallery Section
 export const fetchGallery = async (userId) => {
   try {
-    const response = await axiosInstance.get("/gallery", {
+    const response = await axiosInstance.get("/gallery?userId=hardcoded-user-id-123", {
       params: { userId },
     });
     return response.data;
@@ -60,7 +59,7 @@ export const fetchGallery = async (userId) => {
 };
 export const postGallery = async (data, userId) => {
   try {
-    const response = await axiosInstance.post("/gallery", { ...data, userId });
+    const response = await axiosInstance.post("/gallery?userId=hardcoded-user-id-123", { ...data, userId });
     return response.data;
   } catch (error) {
     throw error;
@@ -91,7 +90,7 @@ export const deleteGallery = async (id, userId) => {
 // Location Section
 export const fetchLocations = async (userId) => {
   try {
-    const response = await axiosInstance.get("/location", {
+    const response = await axiosInstance.get("/location?userId=hardcoded-user-id-123", {
       params: { userId },
     });
     return response.data;
@@ -101,7 +100,7 @@ export const fetchLocations = async (userId) => {
 };
 export const postLocation = async (data, userId) => {
   try {
-    const response = await axiosInstance.post("/location", { ...data, userId });
+    const response = await axiosInstance.post("/location?userId=hardcoded-user-id-123", { ...data, userId });
     return response.data;
   } catch (error) {
     throw error;
@@ -132,7 +131,7 @@ export const deleteLocation = async (id, userId) => {
 // FAQ Section
 export const fetchFAQ = async (userId) => {
   try {
-    const response = await axiosInstance.get("/faq", { params: { userId } });
+    const response = await axiosInstance.get("/faq?userId=hardcoded-user-id-123", { params: { userId } });
     return response.data;
   } catch (error) {
     throw error;
@@ -140,7 +139,7 @@ export const fetchFAQ = async (userId) => {
 };
 export const postFAQ = async (data, userId) => {
   try {
-    const response = await axiosInstance.post("/faq", { ...data, userId });
+    const response = await axiosInstance.post("/faq?userId=hardcoded-user-id-123", { ...data, userId });
     return response.data;
   } catch (error) {
     throw error;
@@ -168,7 +167,7 @@ export const deleteFAQ = async (id, userId) => {
 // Nav Section
 export const fetchNav = async () => {
   try {
-    const response = await axiosInstance.get("/nav");
+    const response = await axiosInstance.get("/nav?userId=hardcoded-user-id-123");
     return response.data;
   } catch (error) {
     throw error;
@@ -176,7 +175,7 @@ export const fetchNav = async () => {
 };
 export const postNav = async (data) => {
   try {
-    const response = await axiosInstance.post("/nav", data);
+    const response = await axiosInstance.post("/nav?userId=hardcoded-user-id-123", data);
     return response.data;
   } catch (error) {
     throw error;
@@ -194,7 +193,7 @@ export const updateNav = async (id, data) => {
 // Footer Section
 export const fetchFooter = async (userId) => {
   try {
-    const response = await axiosInstance.get("/footer", { params: { userId } });
+    const response = await axiosInstance.get("/footer?userId=hardcoded-user-id-123", { params: { userId } });
     return response.data;
   } catch (error) {
     throw error;
@@ -202,7 +201,7 @@ export const fetchFooter = async (userId) => {
 };
 export const postFooter = async (data, userId) => {
   try {
-    const response = await axiosInstance.post("/footer", { ...data, userId });
+    const response = await axiosInstance.post("/footer?userId=hardcoded-user-id-123", { ...data, userId });
     return response.data;
   } catch (error) {
     throw error;
@@ -233,7 +232,7 @@ export const deleteFooter = async (id, userId) => {
 // Data (General)
 export const fetchData = async (userId) => {
   try {
-    const response = await axiosInstance.get("/data", { params: { userId } });
+    const response = await axiosInstance.get("/data?userId=hardcoded-user-id-123", { params: { userId } });
     return response.data;
   } catch (error) {
     throw error;
@@ -241,7 +240,7 @@ export const fetchData = async (userId) => {
 };
 export const postData = async (data, userId) => {
   try {
-    const response = await axiosInstance.post("/data", { ...data, userId });
+    const response = await axiosInstance.post("/data?userId=hardcoded-user-id-123", { ...data, userId });
     return response.data;
   } catch (error) {
     throw error;
