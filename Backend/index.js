@@ -42,6 +42,7 @@ const sectionListRoutes = require("./routes/sectionlist");
 const featureSectionRoutes = require("./routes/featureSection");
 const dishRouter = require("./routes/dish");
 const reviewRouter = require("./routes/review");
+const giftCardRouter = require("./routes/giftcard");
 
 app.use("/api/data", dataRoutes);
 app.use("/api/hero", heroRoutes);
@@ -54,6 +55,7 @@ app.use("/api", sectionListRoutes);
 app.use("/api/feature-section", featureSectionRoutes);
 app.use("/api/dish", dishRouter);
 app.use("/api/review", reviewRouter);
+app.use("/api/giftcard", giftCardRouter);
 
 // ✅ Start server
 const PORT = process.env.PORT || 5000;
