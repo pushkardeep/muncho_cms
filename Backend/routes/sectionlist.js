@@ -10,7 +10,11 @@ router.get("/sectionlist", async (req, res) => {
   if (!doc) {
     doc = await SectionList.create({ userId, sections: [] });
   }
-  res.json({ sections: doc.sections });
+  // Sort sections by priority before returning
+  const sortedSections = [...doc.sections].sort(
+    (a, b) => a.priority - b.priority
+  );
+  res.json({ sections: sortedSections });
 });
 
 // POST: Save/update section list for a user
@@ -21,12 +25,21 @@ router.post("/sectionlist", async (req, res) => {
       .status(400)
       .json({ error: "userId and sections array are required" });
   }
+  // Ensure priorities are correct before saving
+  const prioritizedSections = sections.map((section, idx) => ({
+    ...section,
+    priority: idx,
+  }));
   let doc = await SectionList.findOneAndUpdate(
     { userId },
-    { sections, updatedAt: new Date() },
+    { sections: prioritizedSections, updatedAt: new Date() },
     { new: true, upsert: true }
   );
-  res.json({ message: "Sections updated", sections: doc.sections });
+  // Sort sections by priority before returning
+  const sortedSections = [...doc.sections].sort(
+    (a, b) => a.priority - b.priority
+  );
+  res.json({ message: "Sections updated", sections: sortedSections });
 });
 
 module.exports = router;
